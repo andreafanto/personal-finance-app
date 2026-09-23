@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1520 1020" font-family="Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1520 1060" font-family="Helvetica, Arial, sans-serif">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#1e3a8a"/>
@@ -6,9 +6,15 @@
     <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/>
     </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#15803d"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
   </defs>
 
-  <rect width="1520" height="1020" fill="#ffffff"/>
+  <rect width="1520" height="1060" fill="#ffffff"/>
   <text x="760" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e3a8a">PERSONAL FINANCE APP — PROBLEM-TO-CODE HARNESS</text>
 
   <!-- legend -->
@@ -21,6 +27,13 @@
     <text x="422" y="64">file / artifact</text>
     <rect x="560" y="52" width="16" height="16" fill="#fecaca" stroke="#b91c1c"/>
     <text x="582" y="64">blocking gate</text>
+
+    <line x1="740" y1="60" x2="775" y2="60" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="783" y="64">normal flow</text>
+    <line x1="900" y1="60" x2="935" y2="60" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+    <text x="943" y="64">mismatch → back for fixes</text>
+    <line x1="1140" y1="60" x2="1175" y2="60" stroke="#15803d" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+    <text x="1183" y="64">design verified → proceed</text>
   </g>
 
   <!-- Row 1: define-problem -->
@@ -59,15 +72,13 @@
   <text x="140" y="455" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/analyse-legacy</text>
   <text x="140" y="471" text-anchor="middle" font-size="10" fill="#1e3a8a">existing system, if any</text>
 
-  <!-- figma input -->
+  <!-- figma input: routed around the left margin so it never crosses analyse-legacy -->
   <rect x="40" y="500" width="200" height="46" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4,3"/>
   <text x="140" y="528" text-anchor="middle" font-size="11" fill="#374151">Figma file (external)</text>
-  <line x1="140" y1="500" x2="140" y2="410" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <polyline points="40,523 10,523 10,375 40,375" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGray)"/>
 
   <line x1="240" y1="375" x2="300" y2="375" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="240" y1="460" x2="280" y2="460" stroke="#1e3a8a" stroke-width="1.5"/>
-  <line x1="280" y1="460" x2="280" y2="395" stroke="#1e3a8a" stroke-width="1.5"/>
-  <line x1="280" y1="395" x2="300" y2="395" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <polyline points="240,460 280,460 280,395 300,395" fill="none" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
 
   <rect x="300" y="345" width="220" height="80" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
   <text x="410" y="368" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/architecture-session</text>
@@ -82,9 +93,8 @@
   <text x="710" y="388" text-anchor="middle" font-size="12" fill="#374151">architecture/ADRs/adr-NNNN-*.md</text>
   <text x="710" y="406" text-anchor="middle" font-size="12" fill="#374151">architecture/diagrams/</text>
 
-  <line x1="140" y1="410" x2="140" y2="600" stroke="#1e3a8a" stroke-width="1.5"/>
-  <line x1="410" y1="425" x2="410" y2="600" stroke="#1e3a8a" stroke-width="1.5"/>
-  <line x1="140" y1="600" x2="410" y2="600" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- architecture -> generate-tests, routed through clear space below row 3 -->
+  <polyline points="410,425 410,585 140,585 140,610" fill="none" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
 
   <!-- Row 4: generate-tests -->
   <rect x="40" y="610" width="200" height="60" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
@@ -120,39 +130,44 @@
   <rect x="540" y="720" width="200" height="60" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
   <text x="640" y="755" text-anchor="middle" font-size="12" fill="#374151">src/main/java/...</text>
 
-  <!-- Figma verification gate, fed by implementation, blocking verify -->
-  <line x1="640" y1="780" x2="640" y2="820" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrowRed)"/>
-  <rect x="480" y="820" width="320" height="70" rx="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
-  <text x="640" y="843" text-anchor="middle" font-size="12" font-weight="bold" fill="#7f1d1d">/design-frontend — verification mode</text>
-  <text x="640" y="859" text-anchor="middle" font-size="10" fill="#7f1d1d">built UI checked against Figma design</text>
-  <text x="640" y="874" text-anchor="middle" font-size="10" fill="#7f1d1d">mismatch → design_verified: false, blocks /verify</text>
+  <!-- default path for non-UI requirements: straight down the left column, gate never applies -->
+  <line x1="140" y1="780" x2="140" y2="940" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <line x1="480" y1="855" x2="240" y2="855" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <!-- Figma verification gate: only reached for requirements with frontend: yes -->
+  <line x1="640" y1="780" x2="640" y2="800" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="460" y="800" width="360" height="80" rx="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <text x="640" y="822" text-anchor="middle" font-size="12" font-weight="bold" fill="#7f1d1d">/design-frontend — verification mode</text>
+  <text x="640" y="840" text-anchor="middle" font-size="10" fill="#7f1d1d">(UI requirements only) built UI vs. current Figma design</text>
+  <text x="640" y="857" text-anchor="middle" font-size="10" fill="#7f1d1d">mismatch → design_verified: false, back to /implement</text>
+  <text x="640" y="874" text-anchor="middle" font-size="10" fill="#7f1d1d">match → design_verified: true, /verify may run</text>
 
-  <line x1="140" y1="780" x2="140" y2="830" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- gate output: mismatch, loops back to /implement -->
+  <polyline points="460,850 270,850 270,765 240,765" fill="none" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrowRed)"/>
 
-  <!-- Row 6: verify -->
-  <rect x="40" y="830" width="200" height="70" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
-  <text x="140" y="855" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/verify</text>
-  <text x="140" y="871" text-anchor="middle" font-size="10" fill="#1e3a8a">refuses to run if design</text>
-  <text x="140" y="885" text-anchor="middle" font-size="10" fill="#1e3a8a">gate above isn't clear</text>
+  <!-- gate output: match, proceeds down to /verify -->
+  <polyline points="640,880 640,905 140,905 140,940" fill="none" stroke="#15803d" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
 
-  <line x1="240" y1="865" x2="1000" y2="865" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- Row 6: verify (moved below the gate so the verify->verifier arrow never crosses it) -->
+  <rect x="40" y="940" width="200" height="70" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="140" y="965" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/verify</text>
+  <text x="140" y="981" text-anchor="middle" font-size="10" fill="#1e3a8a">also checks the gate itself --</text>
+  <text x="140" y="995" text-anchor="middle" font-size="10" fill="#1e3a8a">refuses to run if skipped</text>
 
-  <rect x="1000" y="835" width="180" height="60" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
-  <text x="1090" y="860" text-anchor="middle" font-size="12" font-weight="bold" fill="#5b21b6">verifier</text>
-  <text x="1090" y="876" text-anchor="middle" font-size="10" fill="#5b21b6">tests → coverage → gaps</text>
+  <line x1="240" y1="975" x2="1000" y2="975" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <line x1="1180" y1="865" x2="1240" y2="865" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="1000" y="945" width="180" height="60" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="1090" y="970" text-anchor="middle" font-size="12" font-weight="bold" fill="#5b21b6">verifier</text>
+  <text x="1090" y="986" text-anchor="middle" font-size="10" fill="#5b21b6">tests → coverage → gaps</text>
 
-  <rect x="1240" y="835" width="240" height="60" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
-  <text x="1360" y="860" text-anchor="middle" font-size="12" fill="#374151">status: done</text>
-  <text x="1360" y="878" text-anchor="middle" font-size="12" fill="#374151">or blocked (with reason)</text>
+  <line x1="1180" y1="975" x2="1240" y2="975" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <!-- side note: architecture re-entry -->
-  <line x1="640" y1="345" x2="1000" y2="345" stroke="#1e3a8a" stroke-width="1" stroke-dasharray="4,3"/>
-  <line x1="1000" y1="345" x2="1000" y2="835" stroke="#1e3a8a" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="1010" y="600" font-size="10" fill="#1e3a8a" writing-mode="tb" transform="rotate(0 1010,600)">architecture-session is re-entered whenever new findings surface</text>
+  <rect x="1240" y="945" width="240" height="60" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="1360" y="970" text-anchor="middle" font-size="12" fill="#374151">status: done</text>
+  <text x="1360" y="988" text-anchor="middle" font-size="12" fill="#374151">or blocked (with reason)</text>
+
+  <!-- side note: architecture re-entry, dashed, stays clear of every box column -->
+  <polyline points="640,345 1000,345 1000,945" fill="none" stroke="#1e3a8a" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="1015" y="650" font-size="10" fill="#1e3a8a" transform="rotate(-90 1015,650)">architecture-session is re-entered whenever new findings surface</text>
 
   <!-- state tracking box -->
   <rect x="1080" y="90" width="380" height="200" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
@@ -161,7 +176,6 @@
   <text x="1100" y="157" font-size="10" fill="#9a3412">defined → requirements_gathering →</text>
   <text x="1100" y="172" font-size="10" fill="#9a3412">requirements_ready → architecture_ready →</text>
   <text x="1100" y="187" font-size="10" fill="#9a3412">tests_generated → implementing → verifying → done</text>
-  <text x="1100" y="187" font-size="10" fill="#9a3412"></text>
   <text x="1100" y="210" font-size="10" fill="#9a3412">(blocked at any point; design_verified gate for UI items)</text>
   <text x="1100" y="235" font-size="11" fill="#9a3412">rebuild_index.py → backlog.json + PROGRESS.md</text>
   <text x="1100" y="255" font-size="11" fill="#9a3412">SESSION_LOG.md — "resume here" line every session</text>
