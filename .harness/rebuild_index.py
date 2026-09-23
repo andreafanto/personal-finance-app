@@ -59,7 +59,7 @@ def collect():
             fields = parse_frontmatter(path.read_text(encoding="utf-8"))
             if not fields:
                 continue
-            items.append({
+            item = {
                 "id": fields.get("id", path.stem),
                 "type": fields.get("type", item_type),
                 "title": fields.get("title", path.stem),
@@ -67,7 +67,11 @@ def collect():
                 "problem_id": fields.get("problem_id", ""),
                 "file": str(path.relative_to(ROOT)),
                 "updated": fields.get("updated", fields.get("created", "")),
-            })
+            }
+            if "frontend" in fields:
+                item["frontend"] = fields["frontend"]
+                item["design_verified"] = fields.get("design_verified", "false")
+            items.append(item)
     return items
 
 
@@ -95,7 +99,11 @@ def write_progress_md(items):
         lines.append("")
         for item in by_status[status]:
             parent = f" (parent: {item['problem_id']})" if item.get("problem_id") else ""
-            lines.append(f"- **{item['id']}** [{item['type']}] {item['title']}{parent} -- `{item['file']}`")
+            gate = ""
+            if item.get("frontend") == "yes":
+                verified = item.get("design_verified", "false")
+                gate = " ⛔ design not verified" if verified != "true" else " ✅ design verified"
+            lines.append(f"- **{item['id']}** [{item['type']}] {item['title']}{parent} -- `{item['file']}`{gate}")
         lines.append("")
 
     known = set(STATUS_ORDER)

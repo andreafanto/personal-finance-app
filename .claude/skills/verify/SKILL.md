@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Launches the verifier agent to check that tests are green, the implementation actually fulfills the requirement (not just passes its own tests), and surfaces anything missing to the user. Promotes requirements to status done, or blocked with a specific reason. Use when the user says "/verify" or after /implement finishes a batch.
+description: Launches the verifier agent to check that tests are green, the implementation actually fulfills the requirement (not just passes its own tests), and surfaces anything missing to the user. For UI requirements, first enforces a design-verification gate (set by /design-frontend) and refuses to run if the implementation hasn't been checked against its Figma design or a mismatch was found. Promotes requirements to status done, or blocked with a specific reason. Use when the user says "/verify" or after /implement finishes a batch.
 ---
 
 # Verify
@@ -16,6 +16,26 @@ because they share context -- which requirement, which tests, which code
 2. Collect every requirement with `status: implementing` (i.e. code
    exists, not yet verified). If the user named one, narrow to that.
 3. If none qualify, say so.
+
+## Design verification gate (check before anything else)
+
+For each candidate requirement, check its frontmatter:
+
+- If `frontend: yes` and `design_verified: true` -- proceed normally.
+- If `frontend: yes` and `design_verified` is `false`, missing, or the
+  requirement has no `## Design verification` history at all -- **stop for
+  that requirement. Do not launch the verifier agent for it.** Tell the
+  user this requirement has a UI component that hasn't been checked
+  against its Figma design (or was checked and found mismatched), and
+  that they need to run `/design-frontend` in verification mode first.
+  Skip it and continue with any other requirements in the batch that don't
+  have this gate or already pass it.
+- If `frontend` is absent or `no`, there's no UI to check -- proceed
+  normally, no gate applies.
+
+This gate exists so a UI requirement can never reach `status: done`
+without its implementation having been checked against the design it was
+supposed to match.
 
 ## Delegating
 

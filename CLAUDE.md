@@ -109,12 +109,24 @@ entirely under `.claude/`, `.harness/`, `problems/`, `requirements/`, and
 /implement  -->  implementer agent  -->  src/main/java/...
        |
        v
+[gate, UI requirements only] /design-frontend verification mode
+       -->  built UI checked against the Figma design recorded earlier
+       -->  mismatch found?  YES --> design_verified: false, STOP -- back to
+                                      /implement or /design-frontend, /verify refuses to run
+                              NO  --> design_verified: true, proceed
+       |
+       v
 /verify  -->  verifier agent  -->  status: done | blocked
 ```
 
 Architecture is not a one-shot step -- `/architecture-session` is
 re-entered whenever new input arrives (new requirements, frontend design,
 legacy-system findings) to amend the current-state doc and add ADRs.
+
+For any requirement with a UI (`frontend: yes`), the flow is not strictly
+linear at the end: implementation must pass through `/design-frontend`'s
+verification mode before `/verify` will even start. See "Design
+verification gate" below.
 
 ### Boot-up ritual
 
@@ -144,6 +156,27 @@ defined -> requirements_gathering -> requirements_ready -> architecture_ready
 (blocked can apply at any point; ADRs use proposed | accepted | superseded)
 ```
 
+### Design verification gate
+
+Any requirement with UI is marked `frontend: yes` in its frontmatter by
+`/design-frontend` during the design dialogue, along with a `figma:`
+reference recorded in `architecture/diagrams/frontend-<topic>.md`. Once
+implemented, `/design-frontend` is re-entered in verification mode to pull
+the current Figma design (via the Figma MCP tools) and compare it point by
+point against the built UI.
+
+- Match: `design_verified: true`, clear to run `/verify`.
+- Mismatch: `design_verified: false`, findings written to the frontend
+  design doc, and **`/verify` refuses to run for that requirement at all**
+  until it's resolved -- either the implementation is fixed or the design
+  doc is updated and re-verified. A requirement with `frontend: yes` can
+  never reach `status: done` without a clean pass through this gate.
+- A requirement with no `frontend` field (or `frontend: no`) has no UI and
+  skips this gate entirely.
+
+`.harness/PROGRESS.md` shows a ⛔/✅ marker next to any item with
+`frontend: yes` so the gate's state is visible at a glance.
+
 ### Skills (interactive -- run in the main conversation so they can talk
 to you)
 
@@ -153,13 +186,18 @@ to you)
   interview or start the next undefined problem. This is how you get back
   into requirements engineering after any break, long or short.
 - `/architecture-session` -- broad architecture dialogue, re-entrant.
-- `/design-frontend` -- frontend/UI structure dialogue, feeds architecture.
+- `/design-frontend` -- frontend/UI structure dialogue grounded in Figma,
+  feeds architecture. Re-entrant post-implementation in **verification
+  mode**, where it checks the built UI against the Figma design and gates
+  `/verify` on the result -- see "Design verification gate" above.
 - `/analyse-legacy` -- describes an existing/legacy system, feeds
   architecture. Skip if there's no legacy system.
 - `/generate-tests`, `/implement`, `/verify` -- thin launchers that hand
   the mechanical work to an agent, then review the result with you before
   it counts as done. These stay interactive at the review step even
-  though drafting/implementing/checking itself is autonomous.
+  though drafting/implementing/checking itself is autonomous. `/verify`
+  additionally enforces the design verification gate before it will even
+  start, for any requirement with `frontend: yes`.
 
 ### Agents (autonomous, isolated context, invoked by the launcher skills
 above -- not meant to be talked to directly)
@@ -181,6 +219,10 @@ above -- not meant to be talked to directly)
 - Frontmatter stays flat (scalar `key: value` only, comma-separated for
   list-like fields such as `tags`) so `.harness/rebuild_index.py` can
   parse it without a YAML library.
+- Requirements with a UI additionally carry `frontend: yes` and
+  `design_verified: true|false`, set by `/design-frontend` (design dialogue
+  and verification mode respectively). See "Design verification gate"
+  above.
 
 ### Java/build conventions (assumed default -- flag if this should change)
 
