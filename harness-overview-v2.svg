@@ -1,0 +1,298 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1e3a8a"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="1040" fill="#ffffff"/>
+  <text x="800" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e3a8a">PERSONAL FINANCE APP — PROBLEM-TO-CODE HARNESS (v2, ORCHESTRATED)</text>
+
+  <!-- legend -->
+  <g font-size="12" fill="#1f2937">
+    <rect x="40" y="52" width="16" height="16" fill="#bfdbfe" stroke="#1e3a8a"/>
+    <text x="62" y="64">skill (interactive)</text>
+    <rect x="190" y="52" width="16" height="16" fill="#ddd6fe" stroke="#5b21b6"/>
+    <text x="212" y="64">agent (autonomous)</text>
+    <rect x="352" y="46" width="16" height="16" fill="#ede9fe" stroke="#5b21b6"/>
+    <rect x="349" y="49" width="16" height="16" fill="#ede9fe" stroke="#5b21b6"/>
+    <rect x="346" y="52" width="16" height="16" fill="#ddd6fe" stroke="#5b21b6"/>
+    <text x="376" y="64">×N parallel, one per req</text>
+    <rect x="540" y="52" width="16" height="16" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="562" y="64">orchestrator</text>
+    <rect x="670" y="52" width="16" height="16" fill="#f3f4f6" stroke="#6b7280"/>
+    <text x="692" y="64">file / artifact</text>
+    <rect x="800" y="52" width="16" height="16" fill="#fecaca" stroke="#b91c1c"/>
+    <text x="822" y="64">human gate</text>
+
+    <line x1="930" y1="60" x2="965" y2="60" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="973" y="64">normal flow</text>
+    <line x1="1070" y1="60" x2="1105" y2="60" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+    <text x="1113" y="64">fail → back (max 2 retries)</text>
+    <line x1="1290" y1="60" x2="1325" y2="60" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+    <text x="1333" y="64">result file / re-entry</text>
+  </g>
+
+  <!-- ============ INTERACTIVE PHASE (dialogues, never orchestrated) ============ -->
+
+  <!-- Row 1: define-problem -->
+  <rect x="40" y="90" width="200" height="56" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="140" y="114" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/define-problem</text>
+  <text x="140" y="130" text-anchor="middle" font-size="10" fill="#1e3a8a">Socratic dialogue</text>
+
+  <line x1="240" y1="118" x2="300" y2="118" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="300" y="90" width="240" height="56" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="420" y="113" text-anchor="middle" font-size="12" fill="#374151">problems/prob-NNN-*.md</text>
+  <text x="420" y="129" text-anchor="middle" font-size="12" fill="#374151">+ domain-vision.md</text>
+
+  <line x1="140" y1="146" x2="140" y2="180" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Row 2: requirements -->
+  <rect x="40" y="180" width="200" height="56" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="140" y="204" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/requirements</text>
+  <text x="140" y="220" text-anchor="middle" font-size="10" fill="#1e3a8a">recallable interview</text>
+
+  <line x1="240" y1="208" x2="300" y2="208" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="300" y="180" width="240" height="56" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="420" y="212" text-anchor="middle" font-size="12" fill="#374151">requirements/req-NNN-*.md</text>
+
+  <line x1="140" y1="236" x2="140" y2="290" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- GATE-1 on the requirements -> design arrow -->
+  <rect x="152" y="250" width="116" height="26" rx="13" fill="#fecaca" stroke="#b91c1c" stroke-width="1.2"/>
+  <text x="210" y="267" text-anchor="middle" font-size="10" font-weight="bold" fill="#7f1d1d">GATE-1 sign-off</text>
+
+  <!-- Row 3: design-frontend + analyse-legacy + figma feeding architecture -->
+  <rect x="40" y="290" width="200" height="64" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="140" y="313" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/design-frontend</text>
+  <text x="140" y="329" text-anchor="middle" font-size="10" fill="#1e3a8a">screens/flow, grounded</text>
+  <text x="140" y="343" text-anchor="middle" font-size="10" fill="#1e3a8a">in a Figma reference</text>
+
+  <rect x="40" y="370" width="200" height="56" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="140" y="394" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/analyse-legacy</text>
+  <text x="140" y="410" text-anchor="middle" font-size="10" fill="#1e3a8a">existing system, if any</text>
+
+  <!-- figma input: routed around the left margin so it never crosses analyse-legacy -->
+  <rect x="40" y="446" width="200" height="44" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="140" y="472" text-anchor="middle" font-size="11" fill="#374151">Figma file (external)</text>
+  <polyline points="40,468 12,468 12,322 40,322" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGray)"/>
+
+  <line x1="240" y1="322" x2="300" y2="322" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <polyline points="240,398 280,398 280,360 300,360" fill="none" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="300" y="290" width="220" height="90" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="410" y="314" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/architecture-session</text>
+  <text x="410" y="331" text-anchor="middle" font-size="10" fill="#1e3a8a">re-entrant, amend not restart</text>
+  <text x="410" y="346" text-anchor="middle" font-size="10" fill="#1e3a8a">ADRs written as proposed</text>
+  <text x="410" y="361" text-anchor="middle" font-size="10" fill="#1e3a8a">sets modules: per requirement</text>
+
+  <line x1="520" y1="335" x2="580" y2="335" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="580" y="290" width="260" height="90" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="710" y="318" text-anchor="middle" font-size="12" fill="#374151">architecture-documentation.md</text>
+  <text x="710" y="337" text-anchor="middle" font-size="12" fill="#374151">ADRs/adr-NNNN-*.md</text>
+  <text x="710" y="356" text-anchor="middle" font-size="12" fill="#374151">diagrams/</text>
+
+  <!-- dialogue prep agents feeding architecture-session -->
+  <rect x="592" y="408" width="168" height="56" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="586" y="414" width="168" height="56" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="580" y="420" width="168" height="56" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="664" y="440" text-anchor="middle" font-size="12" font-weight="bold" fill="#5b21b6">prep agents ×N</text>
+  <text x="664" y="455" text-anchor="middle" font-size="9" fill="#5b21b6">read-only: Figma extraction,</text>
+  <text x="664" y="467" text-anchor="middle" font-size="9" fill="#5b21b6">AC cross-check, option briefs</text>
+  <polyline points="580,448 550,448 550,370 520,370" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+
+  <!-- GATE-2 next to the architecture -> orchestrator arrow -->
+  <line x1="410" y1="380" x2="410" y2="530" stroke="#1e3a8a" stroke-width="1.5"/>
+  <rect x="420" y="394" width="118" height="26" rx="13" fill="#fecaca" stroke="#b91c1c" stroke-width="1.2"/>
+  <text x="479" y="411" text-anchor="middle" font-size="10" font-weight="bold" fill="#7f1d1d">GATE-2 ADR accept</text>
+
+  <!-- entry into the orchestrated tail -->
+  <polyline points="410,530 80,530 80,680" fill="none" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="245" y="523" text-anchor="middle" font-size="10" fill="#1e3a8a">architecture_ready reqs (modules: set)</text>
+
+  <!-- ============ RIGHT-HAND REFERENCE PANELS ============ -->
+
+  <!-- state tracking -->
+  <rect x="1080" y="90" width="470" height="190" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+  <text x="1315" y="113" text-anchor="middle" font-size="13" font-weight="bold" fill="#9a3412">.harness/ — state tracking</text>
+  <text x="1098" y="136" font-size="10" fill="#9a3412">defined → requirements_gathering → requirements_ready → architecture_ready</text>
+  <text x="1098" y="151" font-size="10" fill="#9a3412">→ tests_generated → implementing → verifying → done   (blocked at any point)</text>
+  <text x="1098" y="171" font-size="11" fill="#9a3412">ORCHESTRATION.md — envelope, parallelism, gates (the contract)</text>
+  <text x="1098" y="189" font-size="11" fill="#9a3412">runs/&lt;run-id&gt;/ — result files + RUN.md (state, gate decisions)</text>
+  <text x="1098" y="207" font-size="11" fill="#9a3412">validate_result.py — checks every envelope</text>
+  <text x="1098" y="225" font-size="11" fill="#9a3412">rebuild_index.py → backlog.json + PROGRESS.md (+ modules)</text>
+  <text x="1098" y="243" font-size="11" fill="#9a3412">SESSION_LOG.md — "resume here" line every session</text>
+  <text x="1098" y="266" font-size="10" font-style="italic" fill="#9a3412">single writer: only the orchestrator / launcher touches shared state</text>
+
+  <!-- human gates -->
+  <rect x="880" y="300" width="330" height="200" rx="8" fill="#fef2f2" stroke="#b91c1c" stroke-width="1.5"/>
+  <text x="1045" y="323" text-anchor="middle" font-size="13" font-weight="bold" fill="#7f1d1d">Human gates</text>
+  <g font-size="10" fill="#7f1d1d">
+    <text x="896" y="345"><tspan font-weight="bold">GATE-1</tspan>  requirement sign-off</text>
+    <text x="896" y="363"><tspan font-weight="bold">GATE-2</tspan>  ADR accepted (data model, user scoping)</text>
+    <text x="896" y="381"><tspan font-weight="bold">GATE-3</tspan>  any DB migration (irreversible)</text>
+    <text x="896" y="399"><tspan font-weight="bold">GATE-4</tspan>  tests approved (+ critic flags)</text>
+    <text x="896" y="417"><tspan font-weight="bold">GATE-5</tspan>  test_suspect / arch_gap flags</text>
+    <text x="896" y="435"><tspan font-weight="bold">GATE-6</tspan>  design mismatch → change the design?</text>
+    <text x="896" y="453"><tspan font-weight="bold">GATE-7</tspan>  merge worktrees · done with known gaps</text>
+    <text x="896" y="480" font-style="italic">automatic moves: backwards or to blocked only</text>
+  </g>
+
+  <!-- result envelope -->
+  <rect x="1230" y="300" width="320" height="200" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="1390" y="323" text-anchor="middle" font-size="13" font-weight="bold" fill="#374151">Result envelope (JSON)</text>
+  <g font-size="10" fill="#374151" font-family="Menlo, Consolas, monospace">
+    <text x="1246" y="345">stage · req</text>
+    <text x="1246" y="363">verdict: ok | needs_human | failed</text>
+    <text x="1246" y="381">inputs · files_touched</text>
+    <text x="1246" y="399">tests: {passed, failed} | null</text>
+    <text x="1246" y="417">flags[]: id kind blocking where text</text>
+    <text x="1246" y="435">next (advisory)</text>
+  </g>
+  <text x="1246" y="460" font-size="10" fill="#374151">flag text = one standalone sentence</text>
+  <text x="1246" y="480" font-size="10" font-style="italic" fill="#374151">always blocking: migration, test_suspect, arch_gap</text>
+
+  <!-- ============ ORCHESTRATED TAIL ============ -->
+
+  <rect x="40" y="560" width="1510" height="420" rx="12" fill="#f0fdfa" stroke="#0f766e" stroke-width="2"/>
+  <text x="460" y="586" font-size="13" font-weight="bold" fill="#0f766e">/orchestrate — orchestrator skill (main conversation · single writer · resumable via RUN.md)</text>
+
+  <!-- column titles -->
+  <g font-size="12" font-weight="bold" fill="#0f766e">
+    <text x="100" y="622">1 · Tests</text>
+    <text x="440" y="622">2 · Implement</text>
+    <text x="810" y="622">3 · Verify</text>
+    <text x="1180" y="622">4 · Close</text>
+  </g>
+
+  <!-- retry loop: verify -> implement, above the columns -->
+  <text x="775" y="644" text-anchor="middle" font-size="10" fill="#b91c1c">red suite / coverage fail / "fix code" → back, max 2 retries</text>
+
+  <!-- Column 1: tests -->
+  <rect x="72" y="668" width="228" height="60" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="66" y="674" width="228" height="60" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="60" y="680" width="228" height="60" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="174" y="705" text-anchor="middle" font-size="12" font-weight="bold" fill="#5b21b6">test-generator ×N</text>
+  <text x="174" y="721" text-anchor="middle" font-size="10" fill="#5b21b6">ambiguities → TODO + flag</text>
+
+
+  <rect x="72" y="758" width="228" height="60" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="66" y="764" width="228" height="60" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="60" y="770" width="228" height="60" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="174" y="795" text-anchor="middle" font-size="12" font-weight="bold" fill="#5b21b6">test-critic ×N</text>
+  <text x="174" y="811" text-anchor="middle" font-size="10" fill="#5b21b6">read-only, adversarial</text>
+
+  <!-- gate between tests and implement -->
+  <line x1="300" y1="800" x2="320" y2="800" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="320" y="690" width="90" height="140" rx="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <g text-anchor="middle" font-size="9" fill="#7f1d1d">
+    <text x="365" y="745" font-size="11" font-weight="bold">GATE-4</text>
+    <text x="365" y="761">tests approved</text>
+    <text x="365" y="775">+ critic flags</text>
+  </g>
+  <line x1="410" y1="755" x2="430" y2="755" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Column 2: implement -->
+  <rect x="442" y="668" width="228" height="150" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="436" y="674" width="228" height="150" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="430" y="680" width="228" height="150" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="544" y="710" text-anchor="middle" font-size="12" font-weight="bold" fill="#5b21b6">implementer ×N</text>
+  <g text-anchor="middle" font-size="10" fill="#5b21b6">
+    <text x="544" y="732">one git worktree per requirement</text>
+    <text x="544" y="752">foundation req (no pom.xml /</text>
+    <text x="544" y="766">modules: core) runs alone first</text>
+    <text x="544" y="786">parallel only on disjoint modules</text>
+    <text x="544" y="806">reserved migration numbers</text>
+  </g>
+
+  <!-- gate between implement and verify -->
+  <line x1="658" y1="760" x2="690" y2="760" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="690" y="690" width="90" height="140" rx="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <g text-anchor="middle" font-size="9" fill="#7f1d1d">
+    <text x="735" y="712" font-size="11" font-weight="bold">GATE-3</text>
+    <text x="735" y="726">migrations</text>
+    <text x="735" y="750" font-size="11" font-weight="bold">GATE-5</text>
+    <text x="735" y="764">test_suspect /</text>
+    <text x="735" y="777">arch_gap</text>
+    <text x="735" y="801" font-size="11" font-weight="bold">GATE-7</text>
+    <text x="735" y="815">merge worktrees</text>
+  </g>
+  <line x1="780" y1="710" x2="800" y2="710" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Column 3: verify -->
+  <rect x="800" y="680" width="240" height="60" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="920" y="705" text-anchor="middle" font-size="12" font-weight="bold" fill="#5b21b6">verifier · suite mode</text>
+  <text x="920" y="721" text-anchor="middle" font-size="10" fill="#5b21b6">once, whole suite, merged tree</text>
+
+
+  <rect x="812" y="758" width="103" height="60" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="806" y="764" width="103" height="60" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="800" y="770" width="103" height="60" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="851" y="793" text-anchor="middle" font-size="11" font-weight="bold" fill="#5b21b6">verifier ×N</text>
+  <text x="851" y="809" text-anchor="middle" font-size="9" fill="#5b21b6">coverage mode</text>
+
+  <rect x="937" y="758" width="103" height="60" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="931" y="764" width="103" height="60" rx="8" fill="#ede9fe" stroke="#5b21b6" stroke-width="1.2"/>
+  <rect x="925" y="770" width="103" height="60" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="976" y="793" text-anchor="middle" font-size="11" font-weight="bold" fill="#5b21b6">design-</text>
+  <text x="976" y="806" text-anchor="middle" font-size="11" font-weight="bold" fill="#5b21b6">checker ×N</text>
+  <text x="976" y="820" text-anchor="middle" font-size="9" fill="#5b21b6">UI reqs, vs Figma</text>
+
+  <!-- gate between verify and close -->
+  <line x1="1040" y1="800" x2="1060" y2="800" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="1060" y="690" width="90" height="140" rx="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <g text-anchor="middle" font-size="9" fill="#7f1d1d">
+    <text x="1105" y="722" font-size="11" font-weight="bold">GATE-6</text>
+    <text x="1105" y="736">fix code or</text>
+    <text x="1105" y="749">change design?</text>
+    <text x="1105" y="780" font-size="11" font-weight="bold">GATE-7</text>
+    <text x="1105" y="794">done with</text>
+    <text x="1105" y="807">known gaps</text>
+  </g>
+  <line x1="1150" y1="720" x2="1170" y2="720" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Column 4: close -->
+  <rect x="1170" y="680" width="360" height="80" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="1.5"/>
+  <text x="1350" y="703" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f766e">orchestrator closes each requirement</text>
+  <text x="1350" y="721" text-anchor="middle" font-size="10" fill="#0f766e">status · design_verified · Verification notes</text>
+  <text x="1350" y="737" text-anchor="middle" font-size="10" fill="#0f766e">rebuild_index.py · SESSION_LOG · commit</text>
+  <text x="1350" y="752" text-anchor="middle" font-size="9" font-style="italic" fill="#0f766e">auto-done only with zero flags and work merged</text>
+
+  <line x1="1350" y1="760" x2="1350" y2="790" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="1170" y="790" width="360" height="40" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="1350" y="815" text-anchor="middle" font-size="12" fill="#374151">status: done | blocked (with reason)</text>
+
+  <!-- blocked items: human routes back into the dialogues -->
+  <polyline points="1105,690 1105,520 800,520 800,380" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+  <text x="958" y="540" text-anchor="middle" font-size="10" fill="#374151">blocked / arch_gap → back to /architecture-session or /requirements</text>
+
+  <!-- result files bar -->
+  <line x1="174" y1="830" x2="174" y2="880" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+  <line x1="544" y1="830" x2="544" y2="880" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+  <line x1="851" y1="830" x2="851" y2="880" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+  <line x1="976" y1="830" x2="976" y2="880" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+  <line x1="1350" y1="834" x2="1350" y2="876" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-start="url(#arrowGray)" marker-end="url(#arrowGray)"/>
+
+  <rect x="60" y="880" width="1470" height="80" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="795" y="904" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">.harness/runs/&lt;run-id&gt;/</text>
+  <text x="795" y="924" text-anchor="middle" font-size="11" fill="#374151" font-family="Menlo, Consolas, monospace">tests-req.json · critic-req.json · implement-req.json · suite.json · coverage-req.json · design-req.json · RUN.md</text>
+  <text x="795" y="946" text-anchor="middle" font-size="10" fill="#374151">worker ends with envelope → orchestrator writes it + runs validate_result.py → routes on verdict + blocking flags only → file is the next stage's input</text>
+
+  <!-- footer -->
+  <text x="800" y="1012" text-anchor="middle" font-size="11" fill="#374151">Standalone launchers (/generate-tests, /implement, /verify, /design-frontend verification mode) still run one stage at a time and write the same result files.</text>
+
+  <!-- arrows drawn last so stacked ×N boxes don't hide their heads -->
+  <line x1="174" y1="740" x2="174" y2="770" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="857" y1="740" x2="857" y2="770" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="982" y1="740" x2="982" y2="770" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <polyline points="1000,680 1000,650 550,650 550,680" fill="none" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+</svg>

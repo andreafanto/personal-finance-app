@@ -88,6 +88,24 @@ problems from a vague idea through to verified, implemented code. It lives
 entirely under `.claude/`, `.harness/`, `problems/`, `requirements/`, and
 `architecture/` in this repo.
 
+### Rule: every backlog item starts with the orchestrator
+
+Whenever anyone starts (or resumes) work on an item in the backlog -- any
+problem or requirement in `.harness/backlog.json`, whatever its status --
+the first action is to invoke `/orchestrate`, never a stage skill
+directly. The orchestrator reads the item's status and open gates, then
+either runs the next stage itself (from `architecture_ready` on) or hands
+off to the right interactive skill (`/requirements`,
+`/architecture-session`, `/design-frontend`) for dialogue stages.
+
+- `/orchestrate` is a main-conversation skill, not a subagent: it must be
+  able to launch worker agents and stop for human gates, and a subagent
+  can do neither.
+- The only exception is `/define-problem` for a brand-new problem, since
+  it isn't in the backlog yet.
+- Invoking a stage skill directly (e.g. `/implement`) is still allowed
+  when the user explicitly asks for it by name.
+
 ### The flow
 
 ```
@@ -119,9 +137,32 @@ entirely under `.claude/`, `.harness/`, `problems/`, `requirements/`, and
 /verify  -->  verifier agent  -->  status: done | blocked
 ```
 
+The same tail, orchestrated (`/orchestrate`, many requirements at once):
+
+```
+architecture_ready reqs
+   |  fan out per req
+   v
+test-generator || test-critic  -->  runs/<id>/tests-*.json, critic-*.json
+   |  GATE-4 tests approved
+   v
+foundation implementer (alone)  -->  implementer || implementer (worktrees)
+   |  GATE-3 migrations, GATE-5 suspect/gap flags, GATE-7 merge
+   v
+verifier suite (once)  -->  verifier coverage || design-checker (UI reqs)
+   |  GATE-6 design direction, GATE-7 done with known gaps
+   v
+orchestrator: statuses + rebuild_index + session log + commit
+```
+
 Architecture is not a one-shot step -- `/architecture-session` is
 re-entered whenever new input arrives (new requirements, frontend design,
 legacy-system findings) to amend the current-state doc and add ADRs.
+
+From `architecture_ready` onward, `/orchestrate` can drive the whole
+tail of the flow (tests -> implement -> verify -> design check) for many
+requirements at once, in parallel, stopping at the human gates. The
+launcher skills still work on their own. See "Orchestration" below.
 
 For any requirement with a UI (`frontend: yes`), the flow is not strictly
 linear at the end: implementation must pass through `/design-frontend`'s
@@ -177,6 +218,40 @@ point against the built UI.
 `.harness/PROGRESS.md` shows a ⛔/✅ marker next to any item with
 `frontend: yes` so the gate's state is visible at a glance.
 
+### Orchestration
+
+`/orchestrate` fans work out to worker agents and stops at human gates.
+The full contract is `.harness/ORCHESTRATION.md`; the essentials:
+
+- **Parallel stages:** test-generator and test-critic per requirement;
+  implementer per requirement in its own git worktree (only after a
+  foundation step runs alone, and only across requirements whose
+  `modules` don't overlap); verifier split into one whole-suite run
+  (never parallel) followed by per-requirement coverage checks in
+  parallel with design-checker for UI requirements. Stages also pipeline
+  across requirements.
+- **Result envelopes:** every worker ends with a small JSON envelope
+  (`stage`, `req`, `verdict: ok|needs_human|failed`, `files_touched`,
+  `tests`, `flags[]`, `next`). The orchestrator writes it to
+  `.harness/runs/<run-id>/<stage>-<req>.json`, validates it with
+  `python3 .harness/validate_result.py`, routes on `verdict` + blocking
+  flags only, and passes the file into the next stage's prompt.
+  `RUN.md` in the same directory is the run's state and gate-decision
+  record; run files are committed.
+- **Single writer:** only the orchestrator (or a launcher skill run
+  standalone) writes frontmatter, run files, the session log, commits,
+  merges, and assigns sequence numbers. Workers write only their own code
+  area.
+- **Human gates** (automatic moves may only go backwards or to
+  `blocked`; forward past a gate needs a human):
+  GATE-1 requirement sign-off, GATE-2 ADR acceptance, GATE-3 any DB
+  schema migration, GATE-4 test approval, GATE-5 `test_suspect`/`arch_gap`
+  flags, GATE-6 "change the design" on a mismatch, GATE-7 merging worktree
+  branches and `done` with known gaps. GATE-1/2 live in the interactive
+  skills; the orchestrator refuses items that haven't passed them.
+- **Retry limit:** 2 implement retries per requirement per run, then
+  escalate.
+
 ### Skills (interactive -- run in the main conversation so they can talk
 to you)
 
@@ -198,6 +273,9 @@ to you)
   though drafting/implementing/checking itself is autonomous. `/verify`
   additionally enforces the design verification gate before it will even
   start, for any requirement with `frontend: yes`.
+- `/orchestrate` -- drives many requirements through the tail of the flow
+  in parallel, stopping at human gates. Resumable: with no argument it
+  continues the latest run with open gates.
 
 ### Agents (autonomous, isolated context, invoked by the launcher skills
 above -- not meant to be talked to directly)
@@ -205,9 +283,18 @@ above -- not meant to be talked to directly)
 - `test-generator` -- drafts JUnit 5 tests from a requirement.
 - `implementer` -- writes production code to satisfy tests + requirement.
   Never edits tests; stops and reports if a test looks wrong.
-- `verifier` -- single agent, three checks in sequence (tests green,
-  requirement coverage, flagged gaps). Deliberately one agent, not three,
-  since the checks share context and are always wanted together.
+- `test-critic` -- read-only adversarial review of drafted tests against
+  the acceptance criteria, so the human's test review shrinks to its
+  flags.
+- `verifier` -- three checks (tests green, requirement coverage, flagged
+  gaps). `full` mode runs all three in sequence (standalone `/verify`);
+  under `/orchestrate` it runs as one `suite` pass over the merged tree,
+  then `coverage` passes per requirement in parallel.
+- `design-checker` -- read-only comparison of built UI against its Figma
+  design; the autonomous half of `/design-frontend` verification mode.
+
+Every agent ends its report with the result envelope defined in
+`.harness/ORCHESTRATION.md`.
 
 ### File/ID conventions
 
@@ -219,6 +306,12 @@ above -- not meant to be talked to directly)
 - Frontmatter stays flat (scalar `key: value` only, comma-separated for
   list-like fields such as `tags`) so `.harness/rebuild_index.py` can
   parse it without a YAML library.
+- Requirements at `architecture_ready` or later carry
+  `modules: a, b` (set by `/architecture-session`; `core` for shared
+  foundations, and a missing field counts as `core`). `/orchestrate` uses
+  it to decide what can be implemented in parallel.
+- Worker results live in `.harness/runs/<YYYYMMDD-HHMM>/` as
+  `<stage>-<req>.json` plus `RUN.md`.
 - Requirements with a UI additionally carry `frontend: yes` and
   `design_verified: true|false`, set by `/design-frontend` (design dialogue
   and verification mode respectively). See "Design verification gate"
@@ -237,6 +330,8 @@ following whatever the architecture session decides for dependencies.
 2. Leave git clean: commit new/updated files (confirm with the user first
    if unrelated uncommitted work is present that isn't part of this
    session).
-3. Append an entry to `.harness/SESSION_LOG.md` with an explicit "resume
+3. Commit any `.harness/runs/` files written this session; list (don't
+   delete) unmerged worktree branches.
+4. Append an entry to `.harness/SESSION_LOG.md` with an explicit "resume
    here" line -- specific enough that a cold read of just that line tells
    you exactly what to do next.
