@@ -102,13 +102,16 @@ Set `status: requirements_ready` only when the user explicitly confirms
 they're satisfied and there are no blocking open questions left (non-
 blocking "nice to know later" questions can remain listed).
 
-## Capture to working memory
+## Note knowledge candidates (memory is saved at MR time)
 
-Interviews are where most domain knowledge comes up. Before the
-checklist, run the `/remember` capture step on this conversation. Pay
-particular attention to terms the user defined and to cross-requirement
-rules, which will matter again for other problems. Rules that apply
-only to this requirement stay in the requirement file.
+Do not write to `knowledge/` here. Opening the MR is what triggers
+`/remember` (see the memory-gate hook). In this session's
+`.harness/SESSION_LOG.md` entry, add one line:
+`- Knowledge candidates: <kind>: <one-line fact> (<who said it>); ...`
+Look especially for terms the user defined and rules
+that apply across requirements. Rules for one requirement stay in its file. These notes are unconfirmed. MR-mode `/remember`
+asks the user to confirm them. They exist so the knowledge is not
+lost if the MR is opened in a later session.
 
 ## Before ending the session (clean-campsite checklist)
 

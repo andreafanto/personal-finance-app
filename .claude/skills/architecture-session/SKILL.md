@@ -68,14 +68,16 @@ For any requirement whose acceptance criteria are now architecturally
 covered, update that requirement's file: bump `status` to
 `architecture_ready` and `updated` date.
 
-## Capture to working memory
+## Note knowledge candidates (memory is saved at MR time)
 
-Run the `/remember` capture step. Decisions go into ADRs (above).
-Record the non-decision knowledge they produce, such as coding
-conventions ("amounts are integer cents", package naming) and new
-constraints, as knowledge entries with `related: adr-NNNN`. Proposed
-ADRs that `/remember` drafted in earlier sessions are waiting for
-acceptance here (GATE-2).
+Do not write to `knowledge/` here. Opening the MR is what triggers
+`/remember` (see the memory-gate hook). In this session's
+`.harness/SESSION_LOG.md` entry, add one line:
+`- Knowledge candidates: <kind>: <one-line fact> (<who said it>); ...`
+Record the non-decision knowledge that ADRs
+produce, such as coding conventions and new constraints, with the ADR id. These notes are unconfirmed. MR-mode `/remember`
+asks the user to confirm them. They exist so the knowledge is not
+lost if the MR is opened in a later session.
 
 ## Before ending the session (clean-campsite checklist)
 

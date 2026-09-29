@@ -91,13 +91,16 @@ Anything still unresolved that a /requirements session should probe further.
 Use `status: draft` instead of `defined` if the user wants to stop before
 the dialogue converges (see clean-campsite handling below).
 
-## Capture to working memory
+## Note knowledge candidates (memory is saved at MR time)
 
-Run the `/remember` capture step on this conversation. Problem framing
-usually produces `term` entries (what the user means by core words such
-as "household" or "budget period") and `fact` entries (how the user
-actually manages money today). The domain vision is not duplicated
-there. It stays in `domain-vision.md`.
+Do not write to `knowledge/` here. Opening the MR is what triggers
+`/remember` (see the memory-gate hook). In this session's
+`.harness/SESSION_LOG.md` entry, add one line:
+`- Knowledge candidates: <kind>: <one-line fact> (<who said it>); ...`
+Problem framing mostly yields `term`s (what the user
+means by core words) and `fact`s (how the user manages money today). These notes are unconfirmed. MR-mode `/remember`
+asks the user to confirm them. They exist so the knowledge is not
+lost if the MR is opened in a later session.
 
 ## Before ending the session (clean-campsite checklist)
 

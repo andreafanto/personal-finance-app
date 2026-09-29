@@ -122,11 +122,9 @@ here).
 
 ## Before ending the session
 
-0. Design dialogue mode: run the `/remember` capture step. Record
-   UI and style-guide conventions the user confirmed (terminology on
-   screen, number/date formatting, color semantics such as "warning at
-   80%") as `kind: convention`. Figma remains the source of truth for
-   visuals. Record only the rules behind them.
+0. Design dialogue mode: add a `Knowledge candidates:` line to the
+   session log entry (see step 4). Record UI and style-guide conventions the user confirmed, such as on-screen terms, formatting, and color meaning.
+   Memory itself is saved when the MR is opened.
 1. Tell the user explicitly what's next: "This should feed into
    `/architecture-session`" (design dialogue mode) or "clear to run
    `/verify`" / "back to `/implement`" (verification mode, depending on
