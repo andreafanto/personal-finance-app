@@ -197,23 +197,34 @@ conversations. The schema and the "what goes where" table are in
 - **Kinds:** `term` (glossary), `rule` (domain invariant), `convention`
   (style guide / code / naming), `constraint`, `fact`. Decisions with
   real alternatives stay ADRs. The index lists both.
-- **Write -- triggered by opening an MR/PR, not by session end.**
-  `.claude/hooks/memory-gate.sh` (a PreToolUse hook in
-  `.claude/settings.json`) blocks `gh pr create`, `glab mr create`,
-  `git push -o merge_request.create`, and MCP create-PR/MR tools. The
-  block stays until `/remember` has run in MR mode for the current HEAD.
-  MR mode reviews the branch's changes and the `Knowledge candidates:`
-  notes in the session log, gets your confirmation, commits, records HEAD
-  in `.harness/.memory-captured` (gitignored), and retries the MR with a
-  `## Working memory` section in its description. Dialogue skills only
-  note candidates in the session log. `/remember` can still be run by
-  hand at any time for an explicit "remember that...".
+- **Write -- automatic detection, confirmed by you.** Two hooks in
+  `.claude/settings.json`:
+  - `memory-signal.sh` (UserPromptSubmit) scans each message for
+    memory triggers: a new or redefined term, a correction of what
+    Claude said, a stated rule, a style preference, a scope line,
+    context about you, or a decision. It nudges Claude. Claude also
+    catches triggers the keyword scan misses. When there is something
+    to save, the reply ends with one line:
+    `Save to memory? [kind] … -- yes / edit / later / no`.
+  - `memory-gate.sh` (PreToolUse) denies the first `git commit` of any
+    change set outside `knowledge/` and `.harness/`. Claude then checks
+    the change set, the conversation, and `.harness/memory-pending.md`
+    ("later" items), asks you about candidates, stages what you accept,
+    runs `memory-gate.sh --mark`, and retries the commit.
+
+  The full trigger list is in `.claude/skills/remember/SKILL.md`
+  ("When to save"). `/remember` also works by hand.
+- **Daily wiki:** `knowledge/wiki/YYYY-MM-DD.md` is generated for every
+  day on which memory changed. It has the full text of new entries plus
+  changed, superseded, and retracted entries and ADRs, with
+  `knowledge/wiki/README.md` as the list of days. It is rebuilt with the
+  index, so it needs no scheduler.
 - **Read:** `/recall <topic>` answers from memory with id citations and
   flags gaps and conflicts. Launcher skills paste the relevant entries'
   full text into agent prompts, because agents have no memory of their own.
 - **Never:** write unconfirmed guesses, rewrite an entry's meaning in
-  place (supersede it instead), or hand-edit `knowledge/INDEX.md` or
-  `.harness/knowledge.json`.
+  place (supersede it instead), or hand-edit `knowledge/INDEX.md`,
+  `knowledge/wiki/`, or `.harness/knowledge.json`.
 
 ### The pipeline states
 
@@ -310,8 +321,8 @@ to you)
   continues the latest run with open gates.
 - `/remember` -- writes confirmed knowledge into working memory
   (`knowledge/`), supersedes or retracts entries, and drafts proposed ADRs.
-  The memory-gate hook runs it automatically, in MR mode, when an MR/PR is
-  about to be opened.
+  Runs automatically from the memory hooks (per message and before
+  every commit), or by hand.
 - `/recall` -- read-only. Answers "what do we know / what did we decide
   about X" from memory, with citations.
 
@@ -364,9 +375,8 @@ following whatever the architecture session decides for dependencies.
 
 ### Clean-campsite checklist (every skill does this before a session ends)
 
-0. Dialogue skills only: add a `Knowledge candidates:` line to this
-   session's log entry (step 4). Do not write memory here. That happens
-   when the MR is opened (see "Working memory").
+0. No separate memory step: triggers are offered live, and the commit
+   in step 2 runs the memory commit check (see "Working memory").
 1. Run `python3 .harness/rebuild_index.py --check` so the backlog/progress
    tracker and `knowledge/INDEX.md` reflect reality and memory entries
    are valid.

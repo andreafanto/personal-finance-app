@@ -91,16 +91,14 @@ Anything still unresolved that a /requirements session should probe further.
 Use `status: draft` instead of `defined` if the user wants to stop before
 the dialogue converges (see clean-campsite handling below).
 
-## Note knowledge candidates (memory is saved at MR time)
+## Working memory (automatic)
 
-Do not write to `knowledge/` here. Opening the MR is what triggers
-`/remember` (see the memory-gate hook). In this session's
-`.harness/SESSION_LOG.md` entry, add one line:
-`- Knowledge candidates: <kind>: <one-line fact> (<who said it>); ...`
-Problem framing mostly yields `term`s (what the user
-means by core words) and `fact`s (how the user manages money today). These notes are unconfirmed. MR-mode `/remember`
-asks the user to confirm them. They exist so the knowledge is not
-lost if the MR is opened in a later session.
+Dialogues are where most memory triggers happen, such as new terms,
+corrections, and stated rules (see the table in the `/remember`
+skill). Offer to save them as they come up, with the one-line
+"Save to memory?" prompt at the end of a reply. Do not run a capture
+at the end of the session: the commit check in the clean-campsite
+commit catches anything missed or answered "later".
 
 ## Before ending the session (clean-campsite checklist)
 

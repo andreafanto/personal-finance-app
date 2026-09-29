@@ -14,6 +14,11 @@ Newest entries go at the top. Format:
 
 ---
 
+## 2026-09-29 -- harness change: automatic memory detection + commit check + daily wiki
+- Did: Replaced the MR gate. `memory-signal.sh` (UserPromptSubmit) flags memory triggers in each user message, such as a new term, a correction, a rule, a convention, a scope line, a fact, or a decision. Claude then offers a one-line "Save to memory?". `memory-gate.sh` (PreToolUse) now blocks the first `git commit` of non-memory changes until Claude has run the memory check and `--mark`. "Later" items go to `.harness/memory-pending.md`. `/remember` has a 14-item "When to save" trigger table. `rebuild_index.py` generates the daily wiki `knowledge/wiki/YYYY-MM-DD.md` plus README. Dialogue skills no longer write candidate notes.
+- Touched: .claude/hooks/{memory-signal.sh,memory-gate.sh}, .claude/settings.json, .claude/skills/{remember,recall,define-problem,requirements,architecture-session,design-frontend}, .harness/rebuild_index.py, .harness/memory-pending.md, knowledge/README.md, knowledge/wiki/, CLAUDE.md, .gitignore, memory-system.svg
+- Resume here: run /define-problem for prob-001. Watch that "Save to memory?" prompts appear when you define terms or correct Claude, and that the clean-campsite commit runs the memory check once.
+
 ## 2026-09-29 -- harness change: memory saved on MR, not session end
 - Did: Memory capture is now triggered by opening an MR/PR. `.claude/hooks/memory-gate.sh` (PreToolUse, `.claude/settings.json`) denies MR/PR creation until `.harness/.memory-captured` (gitignored) equals HEAD. `/remember` gained an MR mode: it reviews the branch diff, the session-log `Knowledge candidates:` lines, and the conversation, then commits, writes the marker, and retries the MR with a `## Working memory` section. Dialogue skills no longer capture at session end; they only note candidates.
 - Touched: .claude/hooks/memory-gate.sh, .claude/settings.json, .gitignore, CLAUDE.md, knowledge/README.md, .claude/skills/{remember,define-problem,requirements,architecture-session,design-frontend}, memory-system.svg

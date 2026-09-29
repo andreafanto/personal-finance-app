@@ -2,5 +2,5 @@ target/
 *.class
 .DS_Store
 
-# working-memory gate marker (local, per checkout)
-.harness/.memory-captured
+# working-memory commit-check marker (local, per checkout)
+.harness/.memory-checked

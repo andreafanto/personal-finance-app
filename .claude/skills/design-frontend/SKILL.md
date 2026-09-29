@@ -122,9 +122,10 @@ here).
 
 ## Before ending the session
 
-0. Design dialogue mode: add a `Knowledge candidates:` line to the
-   session log entry (see step 4). Record UI and style-guide conventions the user confirmed, such as on-screen terms, formatting, and color meaning.
-   Memory itself is saved when the MR is opened.
+0. Design dialogue mode: UI and style-guide conventions the user
+   confirmed (on-screen terms, formatting, color meaning) are memory
+   triggers. Offer "Save to memory?" as they come up. The commit
+   check catches anything missed.
 1. Tell the user explicitly what's next: "This should feed into
    `/architecture-session`" (design dialogue mode) or "clear to run
    `/verify`" / "back to `/implement`" (verification mode, depending on

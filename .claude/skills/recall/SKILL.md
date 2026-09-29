@@ -15,12 +15,14 @@ recorded. Do not fill gaps from general knowledge without labeling them.
    read `knowledge/INDEX.md`.
 2. Find the candidate entries for the topic:
    - match on titles, summaries, and `#tags` in the index
-   - `grep -ril "<keyword>" knowledge/ architecture/ADRs/` for words that
+   - `grep -ril --exclude-dir=wiki "<keyword>" knowledge/ architecture/ADRs/` for words that
      are only in entry bodies. Try synonyms. For example, "rollover" can
      also be "carry over" or "carry forward".
    - use `.harness/knowledge.json` for structured filters (by kind, tag,
      status, source) when the question calls for them
    - follow `related` links one step out
+   - for "what did we learn recently / this week / on <date>", read
+     `knowledge/wiki/README.md` and the matching day pages
 3. Read the **full file** of every candidate. The summary alone is not
    enough to answer from, because the qualifications are in Why and
    How to apply.

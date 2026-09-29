@@ -1,66 +1,97 @@
 ---
 name: remember
-description: Captures confirmed domain knowledge into the harness's working memory (knowledge/kn-NNNN-*.md) -- glossary terms, domain rules, conventions/style guide, constraints, context facts -- and routes decisions to proposed ADRs. Also supersedes or retracts existing entries. Its main trigger is opening a merge/pull request -- the memory-gate hook blocks MR/PR creation until this skill has run in MR mode. Also use when the user says "/remember", "remember that...", "note this down", "add to the glossary/style guide", "that's a rule", "write an ADR for this".
+description: Captures confirmed domain knowledge into the harness's working memory (knowledge/kn-NNNN-*.md) -- glossary terms, domain rules, conventions/style guide, constraints, context facts -- and routes decisions to proposed ADRs. Also supersedes or retracts entries. Runs automatically -- the memory-signal hook flags memory-worthy user messages (new terms, corrections, rules) and the memory-gate hook runs a check before every git commit -- and also when the user says "/remember", "remember that...", "note this down", "add to the glossary/style guide", "that's a rule", "write an ADR for this", or answers "yes" to a "Save to memory?" prompt.
 ---
 
 # Remember
 
-Goal: turn knowledge that came up in conversation into durable memory
+Goal: turn knowledge that comes up while working into durable memory
 entries that a cold-start session or an isolated agent can read and apply
 correctly. The schema is in `knowledge/README.md`. Follow it exactly.
 
 ## When it runs
 
-- **MR mode (the main trigger).** Opening a merge/pull request is the
-  signal to save memory. `.claude/hooks/memory-gate.sh` blocks
-  `gh pr create`, `glab mr create`, `git push -o merge_request.create`,
-  and MCP create-PR/MR tools. The block stays until
-  `.harness/.memory-captured` holds the current HEAD sha. When it
-  blocks, run this skill in MR mode, then retry the same MR command.
-- **Explicit mode.** The user asks to remember a specific thing. Capture
-  it right away. No MR is needed.
+Detection is automatic. Saving always needs the user's confirmation.
 
-Dialogue skills do not capture at session end. They only add unconfirmed
-`Knowledge candidates:` notes to their `.harness/SESSION_LOG.md` entry,
-so MR mode has something to work from after the conversation is gone.
+1. **Live (every user message).** `.claude/hooks/memory-signal.sh`
+   (UserPromptSubmit) scans each message for the signals below and
+   injects a "Memory check" note when it finds one. The hook uses
+   keyword heuristics, so treat its note as a hint. You are the real
+   detector: also act on signals it cannot see, for example a correction
+   that uses no keyword. When a message contains durable knowledge that
+   is not yet recorded, finish the user's task first. Then end the reply
+   with **one** line:
+   `Save to memory? [rule] Rollover carries unspent amount only -- yes / edit / later / no`
+   Put several candidates in one prompt. Ask at most once per reply. Do
+   not ask again about something the user declined in this session.
+2. **Commit check (every `git commit`).** `.claude/hooks/memory-gate.sh`
+   (PreToolUse) denies the first commit attempt for any change set that
+   touches paths outside `knowledge/` and `.harness/`. Then:
+   - Review the change set.
+   - Ask the user about any candidates.
+   - Write the accepted ones and stage them.
+   - Run `.claude/hooks/memory-gate.sh --mark`.
+   - Retry the same commit.
+
+   If nothing qualifies, run `--mark` and retry without asking. The mark
+   is a fingerprint of the uncommitted changes, so any later edit starts
+   a new check.
+3. **Explicit.** The user asks to remember something. Capture it right
+   away.
+
+User answers:
+- **yes**: run steps 2-5 below for that item.
+- **edit**: take the user's wording, then confirm again.
+- **later**: append the item to `.harness/memory-pending.md`. The next
+  commit check brings it up again.
+- **no**: drop it for the rest of this session.
+
+## When to save -- the triggers
+
+Watch for these situations. Each one names the kind it usually becomes.
+
+| # | Situation | Example | Kind |
+|---|-----------|---------|------|
+| 1 | **User introduces or defines a term** | "by *household* I mean everyone sharing accounts"; a quoted or new noun that is not in the glossary | `term` |
+| 2 | **User corrects you** | "no, a budget period is a calendar month, not 30 days" | whatever was wrong: `rule` / `fact` / `term`. **Supersede** the entry if one exists |
+| 3 | **User uses a term differently from the glossary** | glossary says "payee" but the user says "merchant" for salary | `term`. Ask: rename, synonym, or supersede? |
+| 4 | **User states an invariant** | "a transfer must never count as spending" | `rule` |
+| 5 | **User sets a style, naming, or format preference** | "name it payee, not merchant"; "amounts in cents"; "dates as DD/MM" | `convention` |
+| 6 | **User draws a scope line** | "savings goals are out of scope for MVP" | `constraint` |
+| 7 | **User shares context about their situation** | "I have a joint account with my partner" | `fact` |
+| 8 | **User chooses between alternatives** | "let's go with SQLite" | **ADR** (proposed) |
+| 9 | **User rejects your proposal and gives a reason** | "no soft deletes, the audit log covers it" | `rule` / `convention` (negative knowledge) |
+| 10 | **User has to explain the same thing twice** | a second explanation of how rollover works | whatever it is. The repeat shows it should have been in memory already |
+| 11 | **An edge-case answer applies beyond one requirement** | "uncategorised transactions always count in 'Other'" | `rule` (a rule for one requirement stays in its file) |
+| 12 | **A contradiction comes up** | `/recall` conflict, verifier flag, test disagrees with an entry | supersede or retract, after the user decides |
+| 13 | **A commit sets a convention the user approved** | first repository class, error-response format, package layout | `convention` |
+| 14 | **A gate outcome carries a reason** | design mismatch resolved with "change the design, because…"; ADR accepted with conditions | `rule` / `convention` |
+
+Not triggers: one-off task instructions ("run the tests"), things you
+inferred but the user never said, and anything already recorded in
+CLAUDE.md, a requirement, or an ADR.
 
 ## Boot-up
 
 1. Read `knowledge/README.md` (schema and "what goes where").
 2. Run `python3 .harness/rebuild_index.py`, then read `knowledge/INDEX.md`.
    You need the current entries and tags to avoid duplicates.
-3. MR mode only: find the base branch with
-   `git merge-base HEAD origin/main`, falling back to `main`. Everything
-   between the base and HEAD is "this MR".
 
 ## 1. Collect candidates
 
-- **Explicit mode:** the user's text ("remember that X") is the one
-  candidate.
-- **MR mode:** gather from all of these sources, because the
-  conversations that produced the work may be long gone:
-  - `Knowledge candidates:` lines in the `.harness/SESSION_LOG.md`
-    entries added on this branch (`git diff <base>...HEAD -- .harness/SESSION_LOG.md`)
-  - the branch diff of `problems/`, `requirements/`, `architecture/`,
-    `domain-vision.md`. Look at terms defined in requirement text, rules
-    that apply beyond one requirement, and conventions set by new ADRs
-  - conventions that the code on the branch establishes and that the user
-    stated or approved (not ones you infer from the code alone)
-  - the current conversation, if there is one
-- In either mode, keep only knowledge the user **stated or confirmed**:
-  - words the user defined, or used with a specific meaning -> `term`
-  - "always / never / must / can't / only if" statements about the
-    domain -> `rule`
-  - how things should be named, written, formatted, structured -> `convention`
-  - limits on scope, performance, privacy, deployment -> `constraint`
-  - facts about the user, household, or environment that shape
-    decisions -> `fact`
-  - "we chose X over Y because..." -> an **ADR**, not a knowledge entry
-- Drop anything that is:
-  - only your inference, not something the user said or agreed to
-  - already stated in CLAUDE.md, a requirement file, or an ADR (link it
-    with `related` if a new entry depends on it)
-  - only useful for this conversation
+- **Live / explicit:** the flagged message, or the user's text.
+- **Commit check:** gather from these sources:
+  - the change set: `git diff --cached`, plus `git diff` for `-a`.
+    Look closely at `problems/`, `requirements/`, `architecture/`,
+    `domain-vision.md`, and conventions the new code sets that the user
+    approved in this conversation
+  - this conversation: triggers that were not yet prompted or were
+    answered "later"
+  - open items in `.harness/memory-pending.md`
+- In every case, keep only knowledge the user **stated or confirmed**.
+  Drop your own inferences, things already recorded elsewhere (link them
+  with `related` instead), and anything that only matters for this
+  conversation.
 
 ## 2. Check against memory
 
@@ -76,18 +107,19 @@ for key words):
 
 ## 3. Confirm with the user
 
-Show all proposals in one message, compactly:
+Live: use the one-line prompt above. Commit check with several items:
+use one compact list (or AskUserQuestion with multiSelect):
 
 ```
 1. [rule] Budget rollover carries unspent amount only
-   "At period end, a category's unspent budget adds to next period's limit; overspend does not reduce it."
-   why: user wants rollover to reward saving (req-003 interview) · tags: budget, rollover
+   "Unspent budget adds to next period's limit; overspend does not reduce it."
+   why: user corrected the earlier assumption (req-003 interview) · tags: budget, rollover
 2. [supersedes kn-0004] ...
 3. [ADR, proposed] Use SQLite as the default store ...
 ```
 
-Ask the user to accept, edit, or drop each one. Write only what they
-accept. Nothing is written to memory without confirmation.
+Write only what the user accepts. Nothing is written to memory without
+confirmation.
 
 ## 4. Write
 
@@ -102,10 +134,13 @@ accept. Nothing is written to memory without confirmation.
   minor units (cents)", not "Amount storage convention".
 - `source`: the active item id if there is one, else
   `session <today> /<skill that is running>`.
+- `created` / `updated`: today. The daily wiki is built from these dates.
+- For a correction (trigger 2), say in **Why:** what was wrong before.
 - Superseding: new entry gets `supersedes: kn-OLD`. Old entry gets
   `status: superseded`, `superseded_by: kn-NEW`, and a bumped `updated`.
 - Retracting: `status: retracted`, bumped `updated`, and a
   `**Retracted <date>:** <reason>` line at the end of the body.
+- Remove the item from `.harness/memory-pending.md` if it was listed there.
 
 **ADR (decision-shaped candidate):**
 - Next id = highest existing `adr-NNNN` + 1. Use the template in
@@ -119,30 +154,16 @@ accept. Nothing is written to memory without confirmation.
 
 ## 5. Validate and index
 
-Run `python3 .harness/rebuild_index.py --check`. Fix every reported
-error before you continue. Show the user the new lines in
-`knowledge/INDEX.md`.
+Run `python3 .harness/rebuild_index.py --check`. This also regenerates
+the daily wiki (`knowledge/wiki/`). Fix every reported error before you
+continue. Tell the user the new ids in one line.
 
-## Before ending
+## Committing
 
-1. If anything changed, commit the new and changed files in
-   `knowledge/` and `architecture/ADRs/`, plus `.harness/knowledge.json`,
-   on the current branch. Append a `.harness/SESSION_LOG.md` entry that
-   lists the ids written, superseded, or retracted, and include it in
-   the same commit.
-2. **MR mode:** open the MR gate:
-   `git rev-parse HEAD > .harness/.memory-captured`. Write it **after**
-   the commit, because the gate compares against HEAD. Write it also
-   when nothing was worth capturing. "Reviewed, nothing new" is a valid
-   outcome, and the user's confirmation of that outcome counts as the
-   capture.
-3. **MR mode:** retry the MR command that the gate blocked. Add a
-   `## Working memory` section to the MR description that lists each
-   id added, superseded, or retracted with its summary, or says
-   "reviewed, nothing new". Reviewers then see memory changes next to
-   the code changes that caused them.
-
-If more commits land on the branch after capture, HEAD moves and the
-gate closes again. The next MR command (for example a new MR from the
-same branch) then triggers another capture, which only needs to look at
-commits since the previous capture.
+- **Commit check:** stage the memory files (`knowledge/`,
+  `architecture/ADRs/`, `.harness/knowledge.json`,
+  `.harness/memory-pending.md`) into the commit that was blocked. Then
+  run `--mark` and retry.
+- **Live / explicit:** leave the files for the next commit. That commit
+  picks them up, and the commit check then has nothing new to ask about
+  them.

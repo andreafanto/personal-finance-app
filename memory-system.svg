@@ -15,7 +15,7 @@
   </defs>
 
   <rect width="1500" height="1000" fill="#ffffff"/>
-  <text x="750" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e3a8a">PERSONAL FINANCE APP — HARNESS WORKING MEMORY (knowledge/) — SAVED ON MR</text>
+  <text x="750" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e3a8a">PERSONAL FINANCE APP — HARNESS WORKING MEMORY (knowledge/) — AUTO-DETECTED, USER-CONFIRMED</text>
 
   <!-- legend -->
   <g font-size="12" fill="#1f2937">
@@ -49,28 +49,30 @@
 
   <!-- ================= COLUMN 1: WRITE ================= -->
 
-  <rect x="60" y="105" width="300" height="62" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
-  <text x="210" y="125" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">Dialogue skills (during the branch)</text>
-  <text x="210" y="142" text-anchor="middle" font-size="10.5" fill="#1e3a8a">note "Knowledge candidates:" in SESSION_LOG</text>
-  <text x="210" y="157" text-anchor="middle" font-size="10.5" font-style="italic" fill="#1e3a8a">unconfirmed — no memory write at session end</text>
-
-  <line x1="210" y1="167" x2="210" y2="183" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
-
-  <rect x="60" y="185" width="300" height="80" rx="8" fill="#fff7ed" stroke="#9a3412" stroke-width="1.5"/>
-  <text x="210" y="205" text-anchor="middle" font-size="13" font-weight="bold" fill="#9a3412">Open MR/PR → memory-gate.sh</text>
+  <rect x="60" y="105" width="300" height="80" rx="8" fill="#fff7ed" stroke="#9a3412" stroke-width="1.5"/>
+  <text x="210" y="125" text-anchor="middle" font-size="13" font-weight="bold" fill="#9a3412">Every message → memory-signal.sh</text>
   <g font-size="10.5" fill="#9a3412" text-anchor="middle">
-    <text x="210" y="222">PreToolUse hook blocks gh pr create · glab mr create</text>
-    <text x="210" y="237">push -o merge_request.create · MCP create-PR/MR</text>
-    <text x="210" y="254" font-style="italic">until .harness/.memory-captured == HEAD</text>
+    <text x="210" y="142">UserPromptSubmit: new term · correction · rule</text>
+    <text x="210" y="157">convention · scope · fact · decision → nudge</text>
+    <text x="210" y="174" font-style="italic">+ Claude's judgment catches what keywords miss</text>
   </g>
 
-  <line x1="210" y1="265" x2="210" y2="288" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="60" y="197" width="300" height="80" rx="8" fill="#fff7ed" stroke="#9a3412" stroke-width="1.5"/>
+  <text x="210" y="217" text-anchor="middle" font-size="13" font-weight="bold" fill="#9a3412">git commit → memory-gate.sh</text>
+  <g font-size="10.5" fill="#9a3412" text-anchor="middle">
+    <text x="210" y="234">denies 1st commit of changes outside knowledge/</text>
+    <text x="210" y="249">check diff + conversation + memory-pending.md</text>
+    <text x="210" y="266" font-style="italic">(only if something qualifies → ask the user)</text>
+  </g>
+
+    <path d="M360,145 L380,145 L380,330 L362,330" fill="none" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="210" y1="277" x2="210" y2="288" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
 
   <rect x="60" y="290" width="300" height="80" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
-  <text x="210" y="310" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/remember — MR mode</text>
-  <text x="210" y="327" text-anchor="middle" font-size="10.5" fill="#1e3a8a">branch diff + log candidates + conversation</text>
+  <text x="210" y="310" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/remember</text>
+  <text x="210" y="327" text-anchor="middle" font-size="10.5" fill="#1e3a8a">"Save to memory? [kind] … yes/edit/later/no"</text>
   <text x="210" y="342" text-anchor="middle" font-size="10.5" fill="#1e3a8a">dedupe against INDEX · surface conflicts</text>
-  <text x="210" y="360" text-anchor="middle" font-size="10" fill="#374151">(also by hand: "remember that…")</text>
+  <text x="210" y="360" text-anchor="middle" font-size="10" fill="#374151">later → .harness/memory-pending.md · also by hand</text>
 
   <line x1="210" y1="370" x2="210" y2="408" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
 
@@ -88,14 +90,14 @@
   <text x="222" y="519" font-size="10" fill="#1e3a8a">→ decision-shaped</text>
   <text x="320" y="538" text-anchor="middle" font-size="10" fill="#1e3a8a">proposed ADR</text>
 
-  <!-- gate -> commit, marker, retry MR -->
+  <!-- gate -> stage, mark, retry commit -->
   <line x1="110" y1="466" x2="110" y2="588" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
   <rect x="60" y="590" width="300" height="78" rx="8" fill="#fff7ed" stroke="#9a3412" stroke-width="1.5"/>
-  <text x="210" y="610" text-anchor="middle" font-size="12" font-weight="bold" fill="#9a3412">Commit → open gate → retry MR</text>
+  <text x="210" y="610" text-anchor="middle" font-size="12" font-weight="bold" fill="#9a3412">Stage → memory-gate.sh --mark → retry</text>
   <g font-size="10.5" fill="#9a3412" text-anchor="middle">
-    <text x="210" y="627">git rev-parse HEAD &gt; .harness/.memory-captured</text>
-    <text x="210" y="642">MR description gets "## Working memory"</text>
-    <text x="210" y="657" font-style="italic">new commits move HEAD → gate closes again</text>
+    <text x="210" y="627">memory files join the blocked commit</text>
+    <text x="210" y="642">--mark fingerprints the pending changes</text>
+    <text x="210" y="657" font-style="italic">any later edit → new fingerprint → new check</text>
   </g>
 
   <!-- lifecycle -->
@@ -176,7 +178,7 @@
   <g font-size="10.5" fill="#9a3412" text-anchor="middle">
     <text x="670" y="673">required fields · kind ∈ 5 kinds (decision → ADR) · id = filename</text>
     <text x="670" y="689">unique ids · related/supersedes ids exist · supersede links symmetric</text>
-    <text x="670" y="711" font-style="italic">run at the end of every skill (clean-campsite) · exit ≠ 0 on error</text>
+    <text x="670" y="711" font-style="italic">writes INDEX, JSON and wiki — all generated, never hand-edited</text>
   </g>
 
   <!-- validation error loop -->
@@ -197,7 +199,11 @@
   <text x="795" y="810" text-anchor="middle" font-size="10" fill="#374151">one line per entry, grouped by kind</text>
   <text x="795" y="825" text-anchor="middle" font-size="10" fill="#374151">+ ADR list + "Retired" section</text>
 
-  <text x="670" y="862" text-anchor="middle" font-size="10" fill="#6b7280" font-style="italic">generated — never hand-edited</text>
+  <line x1="670" y1="730" x2="670" y2="878" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="440" y="880" width="460" height="64" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="670" y="901" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">knowledge/wiki/YYYY-MM-DD.md — daily wiki</text>
+  <text x="670" y="918" text-anchor="middle" font-size="10" fill="#374151">one page per day memory changed: full text of new entries,</text>
+  <text x="670" y="933" text-anchor="middle" font-size="10" fill="#374151">changed / superseded / retracted, ADRs · README lists the days</text>
 
   <!-- ================= COLUMN 3: READ ================= -->
 

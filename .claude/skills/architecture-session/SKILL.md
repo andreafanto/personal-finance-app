@@ -68,16 +68,14 @@ For any requirement whose acceptance criteria are now architecturally
 covered, update that requirement's file: bump `status` to
 `architecture_ready` and `updated` date.
 
-## Note knowledge candidates (memory is saved at MR time)
+## Working memory (automatic)
 
-Do not write to `knowledge/` here. Opening the MR is what triggers
-`/remember` (see the memory-gate hook). In this session's
-`.harness/SESSION_LOG.md` entry, add one line:
-`- Knowledge candidates: <kind>: <one-line fact> (<who said it>); ...`
-Record the non-decision knowledge that ADRs
-produce, such as coding conventions and new constraints, with the ADR id. These notes are unconfirmed. MR-mode `/remember`
-asks the user to confirm them. They exist so the knowledge is not
-lost if the MR is opened in a later session.
+Dialogues are where most memory triggers happen, such as new terms,
+corrections, and stated rules (see the table in the `/remember`
+skill). Offer to save them as they come up, with the one-line
+"Save to memory?" prompt at the end of a reply. Do not run a capture
+at the end of the session: the commit check in the clean-campsite
+commit catches anything missed or answered "later".
 
 ## Before ending the session (clean-campsite checklist)
 
