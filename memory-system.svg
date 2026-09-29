@@ -1,0 +1,239 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1000" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1e3a8a"/>
+    </marker>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect width="1500" height="1000" fill="#ffffff"/>
+  <text x="750" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e3a8a">PERSONAL FINANCE APP — HARNESS WORKING MEMORY (knowledge/)</text>
+
+  <!-- legend -->
+  <g font-size="12" fill="#1f2937">
+    <rect x="60" y="52" width="16" height="16" fill="#bfdbfe" stroke="#1e3a8a"/>
+    <text x="82" y="64">skill (interactive)</text>
+    <rect x="200" y="52" width="16" height="16" fill="#ddd6fe" stroke="#5b21b6"/>
+    <text x="222" y="64">agent (no memory of its own)</text>
+    <rect x="400" y="52" width="16" height="16" fill="#f3f4f6" stroke="#6b7280"/>
+    <text x="422" y="64">file (committed)</text>
+    <rect x="530" y="52" width="16" height="16" fill="#fff7ed" stroke="#9a3412"/>
+    <text x="552" y="64">script</text>
+    <rect x="610" y="52" width="16" height="16" fill="#fecaca" stroke="#b91c1c"/>
+    <text x="632" y="64">human gate</text>
+
+    <line x1="730" y1="60" x2="765" y2="60" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="773" y="64">write path</text>
+    <line x1="860" y1="60" x2="895" y2="60" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrowTeal)"/>
+    <text x="903" y="64">read path</text>
+    <line x1="985" y1="60" x2="1020" y2="60" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+    <text x="1028" y="64">validation error → fix</text>
+    <line x1="1175" y1="60" x2="1210" y2="60" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+    <text x="1218" y="64">gap / conflict → capture</text>
+  </g>
+
+  <!-- column headers -->
+  <g font-size="13" font-weight="bold" fill="#6b7280" letter-spacing="1">
+    <text x="210" y="94" text-anchor="middle">1 · WRITE</text>
+    <text x="670" y="94" text-anchor="middle">2 · STORE + INDEX</text>
+    <text x="1220" y="94" text-anchor="middle">3 · READ</text>
+  </g>
+
+  <!-- ================= COLUMN 1: WRITE ================= -->
+
+  <rect x="60" y="105" width="300" height="140" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="210" y="128" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">Dialogue skills</text>
+  <g font-size="11" fill="#1e3a8a" text-anchor="middle">
+    <text x="210" y="148">/define-problem · /requirements</text>
+    <text x="210" y="164">/architecture-session · /design-frontend</text>
+    <text x="210" y="186" font-style="italic">capture step before clean-campsite</text>
+    <text x="210" y="210" fill="#374151">— or the user directly —</text>
+    <text x="210" y="226" fill="#374151">"remember that…" / "that's a rule"</text>
+  </g>
+
+  <line x1="210" y1="245" x2="210" y2="288" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="60" y="290" width="300" height="72" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="210" y="312" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/remember</text>
+  <text x="210" y="330" text-anchor="middle" font-size="11" fill="#1e3a8a">collect what the user stated or confirmed</text>
+  <text x="210" y="346" text-anchor="middle" font-size="11" fill="#1e3a8a">dedupe against INDEX · surface conflicts</text>
+
+  <line x1="210" y1="362" x2="210" y2="408" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="60" y="410" width="300" height="56" rx="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <text x="210" y="433" text-anchor="middle" font-size="13" font-weight="bold" fill="#7f1d1d">User confirms each proposal</text>
+  <text x="210" y="451" text-anchor="middle" font-size="11" fill="#7f1d1d">accept / edit / drop — no guesses reach memory</text>
+
+  <!-- gate -> knowledge entry -->
+  <line x1="360" y1="438" x2="438" y2="438" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="399" y="430" text-anchor="middle" font-size="10" fill="#1e3a8a">kn entry</text>
+
+  <!-- gate -> proposed ADR -->
+  <path d="M210,466 L210,545 L438,545" fill="none" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="222" y="505" font-size="10" fill="#1e3a8a">"we chose X over Y"</text>
+  <text x="222" y="519" font-size="10" fill="#1e3a8a">→ decision-shaped</text>
+  <text x="320" y="538" text-anchor="middle" font-size="10" fill="#1e3a8a">proposed ADR</text>
+
+  <!-- lifecycle -->
+  <rect x="60" y="740" width="340" height="190" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.2"/>
+  <text x="230" y="762" text-anchor="middle" font-size="13" font-weight="bold" fill="#374151">Entry lifecycle</text>
+  <rect x="80" y="800" width="96" height="30" rx="6" fill="#ffffff" stroke="#1e3a8a" stroke-width="1.2"/>
+  <text x="128" y="820" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a8a">active</text>
+  <rect x="270" y="776" width="112" height="30" rx="6" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+  <text x="326" y="796" text-anchor="middle" font-size="12" fill="#374151">superseded</text>
+  <rect x="270" y="836" width="112" height="30" rx="6" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+  <text x="326" y="856" text-anchor="middle" font-size="12" fill="#374151">retracted</text>
+  <line x1="176" y1="810" x2="268" y2="792" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGray)"/>
+  <line x1="176" y1="820" x2="268" y2="850" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGray)"/>
+  <text x="222" y="791" text-anchor="middle" font-size="9" fill="#374151">changed</text>
+  <text x="222" y="849" text-anchor="middle" font-size="9" fill="#374151">wrong</text>
+  <g font-size="10" fill="#374151">
+    <text x="78" y="886">changed: new entry supersedes: kn-OLD, old gets superseded_by</text>
+    <text x="78" y="901">wrong: status retracted + reason line — file is never deleted</text>
+    <text x="78" y="916">retired entries stay listed in INDEX · ids never reused</text>
+  </g>
+
+  <!-- ================= COLUMN 2: STORE ================= -->
+
+  <rect x="440" y="105" width="460" height="385" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="460" y="128" font-size="13" font-weight="bold" fill="#374151">knowledge/kn-NNNN-slug.md</text>
+  <text x="880" y="128" text-anchor="end" font-size="11" fill="#6b7280">source of truth · one fact per file</text>
+
+  <!-- kind chips -->
+  <g font-size="10" text-anchor="middle" fill="#1f2937">
+    <rect x="460" y="140" width="72" height="20" rx="10" fill="#ffffff" stroke="#6b7280"/>
+    <text x="496" y="154">term</text>
+    <rect x="540" y="140" width="72" height="20" rx="10" fill="#ffffff" stroke="#6b7280"/>
+    <text x="576" y="154">rule</text>
+    <rect x="620" y="140" width="86" height="20" rx="10" fill="#ffffff" stroke="#6b7280"/>
+    <text x="663" y="154">convention</text>
+    <rect x="714" y="140" width="86" height="20" rx="10" fill="#ffffff" stroke="#6b7280"/>
+    <text x="757" y="154">constraint</text>
+    <rect x="808" y="140" width="72" height="20" rx="10" fill="#ffffff" stroke="#6b7280"/>
+    <text x="844" y="154">fact</text>
+  </g>
+
+  <!-- sample entry -->
+  <rect x="460" y="172" width="420" height="258" rx="4" fill="#ffffff" stroke="#9ca3af"/>
+  <g font-family="Menlo, Consolas, monospace" font-size="10.5" fill="#374151">
+    <text x="472" y="190">---</text>
+    <text x="472" y="205"><tspan fill="#1e3a8a">id:</tspan> kn-0002</text>
+    <text x="472" y="220"><tspan fill="#1e3a8a">type:</tspan> knowledge   <tspan fill="#1e3a8a">kind:</tspan> rule</text>
+    <text x="472" y="235"><tspan fill="#1e3a8a">title:</tspan> "Budget rollover carries unspent only"</text>
+    <text x="472" y="250"><tspan fill="#1e3a8a">summary:</tspan> "Unspent budget adds to next</text>
+    <text x="472" y="265">  period's limit; overspend doesn't reduce it."</text>
+    <text x="472" y="280"><tspan fill="#1e3a8a">status:</tspan> active   <tspan fill="#1e3a8a">source:</tspan> req-003</text>
+    <text x="472" y="295"><tspan fill="#1e3a8a">tags:</tspan> budget, rollover</text>
+    <text x="472" y="310"><tspan fill="#1e3a8a">related:</tspan> req-003, adr-0001</text>
+    <text x="472" y="325"><tspan fill="#1e3a8a">supersedes:</tspan> kn-0001   <tspan fill="#1e3a8a">superseded_by:</tspan> ""</text>
+    <text x="472" y="340">---</text>
+    <text x="472" y="360">Unspent part of the limit carries forward.</text>
+    <text x="472" y="377"><tspan font-weight="bold">**Why:**</tspan> reward saving, not punish a bad month</text>
+    <text x="472" y="394"><tspan font-weight="bold">**How to apply:**</tspan> in the calc, not the limit</text>
+    <text x="472" y="411"><tspan font-weight="bold">**Example:**</tspan> limit 300, spent 250 → 350</text>
+  </g>
+  <g font-size="10.5" fill="#374151">
+    <text x="460" y="452">summary = the fact itself (≤ 200 chars) — it is all the index shows</text>
+    <text x="460" y="470">Why / How to apply let a later reader judge edge cases</text>
+  </g>
+
+  <!-- ADRs -->
+  <rect x="440" y="510" width="200" height="70" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="540" y="532" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">architecture/ADRs/</text>
+  <text x="540" y="549" text-anchor="middle" font-size="10" fill="#374151">proposed → accepted</text>
+  <text x="540" y="564" text-anchor="middle" font-size="10" fill="#374151">(GATE-2 in /architecture-session)</text>
+
+  <line x1="540" y1="580" x2="540" y2="628" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="780" y1="490" x2="780" y2="628" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- validator -->
+  <rect x="440" y="630" width="460" height="100" rx="8" fill="#fff7ed" stroke="#9a3412" stroke-width="1.5"/>
+  <text x="670" y="653" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="12" font-weight="bold" fill="#9a3412">rebuild_index.py --check</text>
+  <g font-size="10.5" fill="#9a3412" text-anchor="middle">
+    <text x="670" y="673">required fields · kind ∈ 5 kinds (decision → ADR) · id = filename</text>
+    <text x="670" y="689">unique ids · related/supersedes ids exist · supersede links symmetric</text>
+    <text x="670" y="711" font-style="italic">run at the end of every skill (clean-campsite) · exit ≠ 0 on error</text>
+  </g>
+
+  <!-- validation error loop -->
+  <path d="M440,700 L35,700 L35,340 L58,340" fill="none" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <text x="250" y="693" text-anchor="middle" font-size="10" fill="#b91c1c">errors → /remember fixes before commit</text>
+
+  <!-- outputs -->
+  <line x1="545" y1="730" x2="545" y2="768" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="795" y1="730" x2="795" y2="768" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="440" y="770" width="210" height="70" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="545" y="793" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">.harness/knowledge.json</text>
+  <text x="545" y="810" text-anchor="middle" font-size="10" fill="#374151">structured: kind, tags, status,</text>
+  <text x="545" y="825" text-anchor="middle" font-size="10" fill="#374151">source, related — for filters</text>
+
+  <rect x="690" y="770" width="210" height="70" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="795" y="793" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">knowledge/INDEX.md</text>
+  <text x="795" y="810" text-anchor="middle" font-size="10" fill="#374151">one line per entry, grouped by kind</text>
+  <text x="795" y="825" text-anchor="middle" font-size="10" fill="#374151">+ ADR list + "Retired" section</text>
+
+  <text x="670" y="862" text-anchor="middle" font-size="10" fill="#6b7280" font-style="italic">generated — never hand-edited</text>
+
+  <!-- ================= COLUMN 3: READ ================= -->
+
+  <!-- read bus -->
+  <path d="M900,805 L940,805 L940,140" fill="none" stroke="#0f766e" stroke-width="1.8"/>
+  <line x1="940" y1="140" x2="978" y2="140" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrowTeal)"/>
+  <line x1="940" y1="290" x2="978" y2="290" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrowTeal)"/>
+  <line x1="940" y1="440" x2="978" y2="440" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrowTeal)"/>
+
+  <rect x="980" y="105" width="480" height="70" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="1220" y="128" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">Boot-up ritual — every skill</text>
+  <text x="1220" y="146" text-anchor="middle" font-size="11" fill="#1e3a8a">CLAUDE.md → domain-vision → backlog → INDEX.md → architecture</text>
+  <text x="1220" y="162" text-anchor="middle" font-size="11" fill="#1e3a8a">open full kn file for relevant entries · active = binding</text>
+
+  <rect x="980" y="235" width="480" height="110" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="1220" y="258" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">/recall &lt;topic&gt;  (read-only)</text>
+  <g font-size="11" fill="#1e3a8a" text-anchor="middle">
+    <text x="1220" y="278">match index titles/summaries/#tags · grep bodies · follow related</text>
+    <text x="1220" y="294">read full files → answer with id citations (kn-0002, adr-0001)</text>
+    <text x="1220" y="310">binding (active, accepted) vs non-binding (proposed)</text>
+    <text x="1220" y="330" font-style="italic">"nothing recorded about X" · names both ids on a conflict</text>
+  </g>
+
+  <rect x="980" y="400" width="480" height="80" rx="8" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5"/>
+  <text x="1220" y="423" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">Launchers: /generate-tests · /implement · /verify</text>
+  <text x="1220" y="442" text-anchor="middle" font-size="11" fill="#1e3a8a">run /recall retrieval for the requirement's topic + tags</text>
+  <text x="1220" y="460" text-anchor="middle" font-size="11" fill="#1e3a8a">paste full entry text under "## Project knowledge (binding)"</text>
+
+  <line x1="1220" y1="480" x2="1220" y2="528" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrowTeal)"/>
+  <text x="1230" y="508" font-size="10" fill="#0f766e">in the prompt</text>
+
+  <rect x="980" y="530" width="480" height="100" rx="8" fill="#ddd6fe" stroke="#5b21b6" stroke-width="1.5"/>
+  <text x="1220" y="553" text-anchor="middle" font-size="13" font-weight="bold" fill="#5b21b6">Agents (isolated context)</text>
+  <text x="1220" y="572" text-anchor="middle" font-size="11" fill="#5b21b6">test-generator · implementer · verifier</text>
+  <text x="1220" y="592" text-anchor="middle" font-size="11" fill="#5b21b6">apply glossary, rules, conventions they were handed</text>
+  <text x="1220" y="610" text-anchor="middle" font-size="11" fill="#5b21b6">verifier flags code/tests that contradict an entry, citing its id</text>
+
+  <!-- ground rules -->
+  <rect x="980" y="690" width="480" height="210" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.2"/>
+  <text x="1220" y="713" text-anchor="middle" font-size="13" font-weight="bold" fill="#374151">Ground rules</text>
+  <g font-size="11" fill="#374151">
+    <text x="1000" y="738">✓ only what the user stated or confirmed</text>
+    <text x="1000" y="756">✓ one fact per entry; link related ones by id</text>
+    <text x="1000" y="774">✓ don't copy CLAUDE.md / requirements / ADRs — link them</text>
+    <text x="1000" y="792">✓ reuse existing tags before inventing new ones</text>
+    <text x="1000" y="818">✗ unconfirmed guesses (→ "Open questions" instead)</text>
+    <text x="1000" y="836">✗ rewriting an entry's meaning in place (supersede it)</text>
+    <text x="1000" y="854">✗ deleting entries or reusing ids</text>
+    <text x="1000" y="872">✗ hand-editing INDEX.md or knowledge.json</text>
+  </g>
+
+  <!-- feedback loop: gaps / contradictions back to capture -->
+  <path d="M1460,580 L1482,580 L1482,965 L15,965 L15,310 L58,310" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGray)"/>
+  <text x="750" y="958" text-anchor="middle" font-size="11" fill="#6b7280">gap found by /recall or a contradiction flagged by the verifier → user resolves it → captured with /remember</text>
+</svg>
