@@ -20,7 +20,8 @@ accountable to it.
 
 ## Boot-up
 
-1. Read `CLAUDE.md`, `domain-vision.md`.
+1. Read `CLAUDE.md`, `domain-vision.md`, `knowledge/INDEX.md`. Look at
+   the `convention` entries especially: they are the UI style guide.
 2. Read `requirements/*.md` with `status: requirements_ready` or later --
    frontend design should be grounded in actual requirements, not
    invented from scratch.
@@ -121,6 +122,11 @@ here).
 
 ## Before ending the session
 
+0. Design dialogue mode: run the `/remember` capture step. Record
+   UI and style-guide conventions the user confirmed (terminology on
+   screen, number/date formatting, color semantics such as "warning at
+   80%") as `kind: convention`. Figma remains the source of truth for
+   visuals. Record only the rules behind them.
 1. Tell the user explicitly what's next: "This should feed into
    `/architecture-session`" (design dialogue mode) or "clear to run
    `/verify`" / "back to `/implement`" (verification mode, depending on

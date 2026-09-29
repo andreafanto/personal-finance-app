@@ -85,8 +85,8 @@ Not in current scope, but noted as the long-term feature areas this app is meant
 
 This project uses a project-local harness of skills and agents to take
 problems from a vague idea through to verified, implemented code. It lives
-entirely under `.claude/`, `.harness/`, `problems/`, `requirements/`, and
-`architecture/` in this repo.
+entirely under `.claude/`, `.harness/`, `problems/`, `requirements/`,
+`architecture/`, and `knowledge/` in this repo.
 
 ### Rule: every backlog item starts with the orchestrator
 
@@ -179,9 +179,33 @@ else:
 3. `.harness/backlog.json` and `.harness/PROGRESS.md` (regenerate first
    with `python3 .harness/rebuild_index.py` if they look stale relative to
    the `problems/`, `requirements/`, `architecture/ADRs/` files)
-4. `architecture/architecture-documentation.md` + relevant ADRs
-5. Whatever specific problem/requirement file is the active item for that
+4. `knowledge/INDEX.md` -- the working memory digest (glossary, domain
+   rules, conventions/style guide, constraints, facts, ADR list). Open the
+   full `knowledge/kn-*.md` file for any entry relevant to the session's
+   topic. Active entries are binding unless the user overrides them.
+5. `architecture/architecture-documentation.md` + relevant ADRs
+6. Whatever specific problem/requirement file is the active item for that
    session
+
+### Working memory
+
+Domain knowledge from the dialogue sessions is stored in `knowledge/` as
+small, typed, confirmed entries, so it does not get lost between
+conversations. The schema and the "what goes where" table are in
+`knowledge/README.md`.
+
+- **Kinds:** `term` (glossary), `rule` (domain invariant), `convention`
+  (style guide / code / naming), `constraint`, `fact`. Decisions with
+  real alternatives stay ADRs. The index lists both.
+- **Write:** `/remember` proposes entries, gets your confirmation, and
+  writes them, or drafts a `proposed` ADR. Every dialogue skill runs it
+  as a capture step before its clean-campsite checklist.
+- **Read:** `/recall <topic>` answers from memory with id citations and
+  flags gaps and conflicts. Launcher skills paste the relevant entries'
+  full text into agent prompts, because agents have no memory of their own.
+- **Never:** write unconfirmed guesses, rewrite an entry's meaning in
+  place (supersede it instead), or hand-edit `knowledge/INDEX.md` or
+  `.harness/knowledge.json`.
 
 ### The pipeline states
 
@@ -276,6 +300,10 @@ to you)
 - `/orchestrate` -- drives many requirements through the tail of the flow
   in parallel, stopping at human gates. Resumable: with no argument it
   continues the latest run with open gates.
+- `/remember` -- writes confirmed knowledge into working memory
+  (`knowledge/`), supersedes or retracts entries, and drafts proposed ADRs.
+- `/recall` -- read-only. Answers "what do we know / what did we decide
+  about X" from memory, with citations.
 
 ### Agents (autonomous, isolated context, invoked by the launcher skills
 above -- not meant to be talked to directly)
@@ -299,7 +327,8 @@ Every agent ends its report with the result envelope defined in
 ### File/ID conventions
 
 - `problems/prob-NNN-slug.md`, `requirements/req-NNN-slug.md` (NNN and
-  slug mirror the parent problem), `architecture/ADRs/adr-NNNN-slug.md`.
+  slug mirror the parent problem), `architecture/ADRs/adr-NNNN-slug.md`,
+  `knowledge/kn-NNNN-slug.md`.
 - IDs are sequential and never reused, even if a problem/requirement is
   later abandoned -- mark it `status: blocked` or note it as superseded,
   don't renumber.
@@ -325,8 +354,12 @@ following whatever the architecture session decides for dependencies.
 
 ### Clean-campsite checklist (every skill does this before a session ends)
 
-1. Run `python3 .harness/rebuild_index.py` so the backlog/progress tracker
-   reflect reality.
+0. Dialogue skills only: run the `/remember` capture step on this
+   session's conversation, so confirmed terms, rules, conventions,
+   constraints, and facts go into working memory.
+1. Run `python3 .harness/rebuild_index.py --check` so the backlog/progress
+   tracker and `knowledge/INDEX.md` reflect reality and memory entries
+   are valid.
 2. Leave git clean: commit new/updated files (confirm with the user first
    if unrelated uncommitted work is present that isn't part of this
    session).

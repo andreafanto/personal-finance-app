@@ -16,6 +16,8 @@ collaborator here, not a stenographer -- your job includes pushing back.
 3. Read `.harness/PROGRESS.md` and `.harness/backlog.json` if they exist,
    so you know what problems already exist and don't duplicate one.
 4. Skim `problems/*.md` titles/status if PROGRESS.md is stale or missing.
+5. Read `knowledge/INDEX.md`. Use the glossary's terms, and say so if the
+   new problem conflicts with a recorded rule or constraint.
 
 ## If domain-vision.md is still a template (unfilled)
 
@@ -89,10 +91,18 @@ Anything still unresolved that a /requirements session should probe further.
 Use `status: draft` instead of `defined` if the user wants to stop before
 the dialogue converges (see clean-campsite handling below).
 
+## Capture to working memory
+
+Run the `/remember` capture step on this conversation. Problem framing
+usually produces `term` entries (what the user means by core words such
+as "household" or "budget period") and `fact` entries (how the user
+actually manages money today). The domain vision is not duplicated
+there. It stays in `domain-vision.md`.
+
 ## Before ending the session (clean-campsite checklist)
 
-1. Run `python3 .harness/rebuild_index.py` so the backlog/progress tracker
-   reflect the new/updated problem file.
+1. Run `python3 .harness/rebuild_index.py --check` so the backlog/progress
+   tracker and the knowledge index reflect the new/updated files.
 2. If this is a git repo with changes, stage and commit the new/updated
    files (ask the user first if uncommitted work already existed that
    wasn't yours).

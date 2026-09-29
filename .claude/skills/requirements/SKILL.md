@@ -15,7 +15,9 @@ pick up exactly where you left off.
 
 ## Boot-up (do this first, every time)
 
-1. Read `CLAUDE.md`, `domain-vision.md`.
+1. Read `CLAUDE.md`, `domain-vision.md`, `knowledge/INDEX.md`. Reuse the
+   glossary's terms in the interview and the requirement file. Treat
+   recorded rules and constraints as settled unless the user reopens them.
 2. Read `.harness/backlog.json` (regenerate first with
    `python3 .harness/rebuild_index.py` if it looks stale).
 3. Determine what to work on, in this priority order:
@@ -100,9 +102,17 @@ Set `status: requirements_ready` only when the user explicitly confirms
 they're satisfied and there are no blocking open questions left (non-
 blocking "nice to know later" questions can remain listed).
 
+## Capture to working memory
+
+Interviews are where most domain knowledge comes up. Before the
+checklist, run the `/remember` capture step on this conversation. Pay
+particular attention to terms the user defined and to cross-requirement
+rules, which will matter again for other problems. Rules that apply
+only to this requirement stay in the requirement file.
+
 ## Before ending the session (clean-campsite checklist)
 
-1. `python3 .harness/rebuild_index.py`.
+1. `python3 .harness/rebuild_index.py --check`.
 2. Commit new/updated files (confirm with user if unrelated uncommitted
    work exists).
 3. Append to `.harness/SESSION_LOG.md` with an exact resume line -- this

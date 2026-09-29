@@ -16,7 +16,9 @@ current architecture doesn't account for. Each entry should feel like
 
 ## Boot-up (do this first, every time)
 
-1. Read `CLAUDE.md`, `domain-vision.md`.
+1. Read `CLAUDE.md`, `domain-vision.md`, `knowledge/INDEX.md`. Recorded
+   constraints and rules are inputs to every decision. Check each option
+   against them.
 2. Read `architecture/architecture-documentation.md` (current state).
 3. Read all `architecture/ADRs/*.md` (at least titles/status -- full text
    for any that look related to today's topic).
@@ -66,9 +68,18 @@ For any requirement whose acceptance criteria are now architecturally
 covered, update that requirement's file: bump `status` to
 `architecture_ready` and `updated` date.
 
+## Capture to working memory
+
+Run the `/remember` capture step. Decisions go into ADRs (above).
+Record the non-decision knowledge they produce, such as coding
+conventions ("amounts are integer cents", package naming) and new
+constraints, as knowledge entries with `related: adr-NNNN`. Proposed
+ADRs that `/remember` drafted in earlier sessions are waiting for
+acceptance here (GATE-2).
+
 ## Before ending the session (clean-campsite checklist)
 
-1. `python3 .harness/rebuild_index.py`.
+1. `python3 .harness/rebuild_index.py --check`.
 2. Commit new/updated files.
 3. Append to `.harness/SESSION_LOG.md`: what was decided, which ADRs were
    added/superseded, which requirements moved to `architecture_ready`, and

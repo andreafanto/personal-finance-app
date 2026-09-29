@@ -43,6 +43,11 @@ Launch the `verifier` agent (fresh context) per requirement (or a batch)
 with:
 - The full `requirements/req-NNN-*.md` (especially acceptance criteria).
 - The test file(s) and implementation files involved.
+- **Project knowledge (binding):** run `/recall`'s retrieval steps for
+  this requirement's topic and tags, and paste the full text of the
+  relevant active `knowledge/kn-*.md` entries (glossary, rules,
+  conventions) under a `## Project knowledge (binding)` heading. The
+  agent has no other way to learn them.
 - Instruction to run the three checks, in order, and stop/report clearly
   at whichever one fails rather than continuing past a red state:
   1. **Tests green**: run the relevant test suite, report pass/fail exactly.
@@ -54,6 +59,8 @@ with:
   3. **Gaps for the user**: anything the requirement implies that neither
      tests nor code address, anything ambiguous that got resolved by
      assumption during implementation and should be confirmed by a human.
+     Also flag any place where the code or tests contradict a binding
+     knowledge entry, citing its id.
 
 ## Reviewing the result
 

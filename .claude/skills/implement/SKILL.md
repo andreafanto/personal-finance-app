@@ -28,6 +28,11 @@ prompt per batch (one invocation covering all target requirements is fine
 - The full contents of each target `requirements/req-NNN-*.md` and its
   test file(s).
 - `architecture/architecture-documentation.md` and relevant ADRs.
+- **Project knowledge (binding):** run `/recall`'s retrieval steps for
+  this requirement's topic and tags, and paste the full text of the
+  relevant active `knowledge/kn-*.md` entries (glossary, rules,
+  conventions) under a `## Project knowledge (binding)` heading. The
+  agent has no other way to learn them.
 - Explicit instruction: implement the minimum correct code to satisfy the
   tests and requirements, following existing code conventions in `src/`
   once any exist. Do not modify the tests to make them pass -- if a test

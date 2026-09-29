@@ -30,6 +30,11 @@ prompt that includes:
 - The relevant sections of `architecture/architecture-documentation.md`
   and any ADRs it should follow (package structure, frameworks, storage
   approach).
+- **Project knowledge (binding):** run `/recall`'s retrieval steps for
+  this requirement's topic and tags, and paste the full text of the
+  relevant active `knowledge/kn-*.md` entries (glossary, rules,
+  conventions) under a `## Project knowledge (binding)` heading. The
+  agent has no other way to learn them.
 - Where to write the test file (standard Maven layout:
   `src/test/java/<package>/...`).
 - Explicit instruction: write test *signatures and bodies* that assert the
