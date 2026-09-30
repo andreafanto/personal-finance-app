@@ -14,6 +14,11 @@ Newest entries go at the top. Format:
 
 ---
 
+## 2026-09-30 -- harness change: /planning-session skill
+- Did: Added `/planning-session`, an interactive skill that models milestones, tasks, and docs. It first rebuilds the domain from memory as a cited brief the user corrects, then asks one question at a time and challenges the answers. It has a personal-finance challenge bank (transfers vs credit cards, entry friction, data scoping, money sign, category merge, rollover, backups) and a domain dependency chain. New item types `ms-`/`task-`/`doc-` (schema in `planning/README.md`) are indexed by `rebuild_index.py`, which validates their status and links and adds a milestone roll-up to PROGRESS.md.
+- Touched: .claude/skills/planning-session/SKILL.md, planning/README.md, .harness/rebuild_index.py, CLAUDE.md
+- Resume here: memory and domain-vision.md are still empty, so run /define-problem first. After that, run /planning-session in milestone mode to plan the first MVP milestone.
+
 ## 2026-09-29 -- harness change: automatic memory detection + commit check + daily wiki
 - Did: Replaced the MR gate. `memory-signal.sh` (UserPromptSubmit) flags memory triggers in each user message, such as a new term, a correction, a rule, a convention, a scope line, a fact, or a decision. Claude then offers a one-line "Save to memory?". `memory-gate.sh` (PreToolUse) now blocks the first `git commit` of non-memory changes until Claude has run the memory check and `--mark`. "Later" items go to `.harness/memory-pending.md`. `/remember` has a 14-item "When to save" trigger table. `rebuild_index.py` generates the daily wiki `knowledge/wiki/YYYY-MM-DD.md` plus README. Dialogue skills no longer write candidate notes.
 - Touched: .claude/hooks/{memory-signal.sh,memory-gate.sh}, .claude/settings.json, .claude/skills/{remember,recall,define-problem,requirements,architecture-session,design-frontend}, .harness/rebuild_index.py, .harness/memory-pending.md, knowledge/README.md, knowledge/wiki/, CLAUDE.md, .gitignore, memory-system.svg

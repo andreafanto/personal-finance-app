@@ -103,6 +103,9 @@ off to the right interactive skill (`/requirements`,
   can do neither.
 - The only exception is `/define-problem` for a brand-new problem, since
   it isn't in the backlog yet.
+- Planning items in the backlog (milestones, tasks, docs -- see
+  `planning/README.md`) are not pipeline items: work on them starts with
+  `/planning-session`, not `/orchestrate`.
 - Invoking a stage skill directly (e.g. `/implement`) is still allowed
   when the user explicitly asks for it by name.
 
@@ -319,6 +322,12 @@ to you)
 - `/orchestrate` -- drives many requirements through the tail of the flow
   in parallel, stopping at human gates. Resumable: with no argument it
   continues the latest run with open gates.
+- `/planning-session` -- models milestones, tasks, and docs with you.
+  Rebuilds the domain from memory first, asks one question at a time, and
+  challenges vague, out-of-scope, or badly ordered answers. Writes
+  `planning/milestones/`, `planning/tasks/`, `docs/`. Never changes
+  pipeline statuses, and never changes the domain (memory, ADRs, vision)
+  without asking you about each item first. Resumable.
 - `/remember` -- writes confirmed knowledge into working memory
   (`knowledge/`), supersedes or retracts entries, and drafts proposed ADRs.
   Runs automatically from the memory hooks (per message and before
@@ -350,6 +359,9 @@ Every agent ends its report with the result envelope defined in
 - `problems/prob-NNN-slug.md`, `requirements/req-NNN-slug.md` (NNN and
   slug mirror the parent problem), `architecture/ADRs/adr-NNNN-slug.md`,
   `knowledge/kn-NNNN-slug.md`.
+- Planning: `planning/milestones/ms-NNN-slug.md`,
+  `planning/tasks/task-NNNN-slug.md`, `docs/doc-NNN-slug.md`. Schema and
+  statuses in `planning/README.md`; validated by `rebuild_index.py --check`.
 - IDs are sequential and never reused, even if a problem/requirement is
   later abandoned -- mark it `status: blocked` or note it as superseded,
   don't renumber.

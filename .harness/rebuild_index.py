@@ -2,7 +2,7 @@
 """
 Rebuilds .harness/backlog.json (machine-readable) and .harness/PROGRESS.md
 (human-readable) from the YAML frontmatter of every problem, requirement,
-and ADR file in the repo.
+ADR, and planning file (milestone, task, doc) in the repo.
 
 Frontmatter is kept intentionally flat (scalar key: value pairs only, no
 nested structures) so this script needs no YAML library.
@@ -29,7 +29,19 @@ SOURCES = [
     ("problem", ROOT / "problems", "prob-"),
     ("requirement", ROOT / "requirements", "req-"),
     ("adr", ROOT / "architecture" / "ADRs", "adr-"),
+    ("milestone", ROOT / "planning" / "milestones", "ms-"),
+    ("task", ROOT / "planning" / "tasks", "task-"),
+    ("doc", ROOT / "docs", "doc-"),
 ]
+
+# Planning items (written by /planning-session). Schema: planning/README.md.
+PLAN_STATUSES = {
+    "milestone": ["planned", "active", "done", "dropped"],
+    "task": ["todo", "doing", "done", "blocked", "dropped"],
+    "doc": ["draft", "reviewed", "published", "dropped"],
+}
+# Frontmatter fields on planning items that hold ids which must resolve.
+PLAN_LINK_FIELDS = ["milestone", "depends_on", "requirements", "problems", "related", "sources"]
 
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 
@@ -39,7 +51,8 @@ STATUS_ORDER = [
     "architecture_ready", "tests_generated",
     "implementing", "verifying", "done",
     "proposed", "accepted", "superseded",
-    "blocked",
+    "planned", "active", "todo", "doing", "reviewed", "published",
+    "blocked", "dropped",
 ]
 
 
@@ -62,7 +75,7 @@ def collect():
     for item_type, folder, prefix in SOURCES:
         if not folder.exists():
             continue
-        for path in sorted(folder.glob("*.md")):
+        for path in sorted(folder.glob(f"{prefix}*.md")):
             fields = parse_frontmatter(path.read_text(encoding="utf-8"))
             if not fields:
                 continue
@@ -78,8 +91,35 @@ def collect():
             if "frontend" in fields:
                 item["frontend"] = fields["frontend"]
                 item["design_verified"] = fields.get("design_verified", "false")
+            if item_type in PLAN_STATUSES:
+                for key in PLAN_LINK_FIELDS + ["target", "audience", "kind"]:
+                    if fields.get(key):
+                        item[key] = fields[key]
             items.append(item)
     return items
+
+
+def validate_plan(items):
+    """Planning items: status in the allowed set, id matches filename, links resolve."""
+    errors = []
+    known = {i["id"] for i in items}
+    known |= {"-".join(p.stem.split("-")[:2]) for p in KNOWLEDGE_DIR.glob("kn-*.md")}
+    for i in items:
+        if i["type"] not in PLAN_STATUSES:
+            continue
+        where = i["file"]
+        if not Path(i["file"]).name.startswith(i["id"] + "-"):
+            errors.append(f"{where}: id '{i['id']}' does not match the filename")
+        if i["status"] not in PLAN_STATUSES[i["type"]]:
+            errors.append(f"{where}: status '{i['status']}' not one of {', '.join(PLAN_STATUSES[i['type']])}")
+        for key in PLAN_LINK_FIELDS:
+            for ref in split_list(i.get(key, "")):
+                if ref not in known:
+                    errors.append(f"{where}: {key} '{ref}' does not exist")
+        if i["type"] == "task" and i.get("milestone"):
+            if not i["milestone"].startswith("ms-"):
+                errors.append(f"{where}: milestone '{i['milestone']}' is not a ms- id")
+    return errors
 
 
 def write_backlog_json(items):
@@ -121,6 +161,27 @@ def write_progress_md(items):
         for item in entries:
             lines.append(f"- **{item['id']}** [{item['type']}] {item['title']} -- `{item['file']}`")
         lines.append("")
+
+    milestones = [i for i in items if i["type"] == "milestone"]
+    if milestones:
+        by_id = {i["id"]: i for i in items}
+        lines.append("## Milestones roll-up")
+        lines.append("")
+        for ms in milestones:
+            target = f", target {ms['target']}" if ms.get("target") else ""
+            lines.append(f"### {ms['id']} {ms['title']} ({ms['status']}{target})")
+            lines.append("")
+            for rid in split_list(ms.get("requirements", "")):
+                req = by_id.get(rid)
+                lines.append(f"- {rid}: {req['status'] if req else 'MISSING'}")
+            tasks = [i for i in items if i["type"] == "task" and i.get("milestone") == ms["id"]]
+            if tasks:
+                counts = {}
+                for t in tasks:
+                    counts[t["status"]] = counts.get(t["status"], 0) + 1
+                summary = ", ".join(f"{n} {st}" for st, n in sorted(counts.items()))
+                lines.append(f"- tasks: {summary}")
+            lines.append("")
 
     if not items:
         lines.append("_Nothing tracked yet. Run /define-problem to get started._")
@@ -388,13 +449,13 @@ def main():
     adrs = [{"id": i["id"], "title": i["title"], "status": i["status"], "file": i["file"]}
             for i in items if i["type"] == "adr"]
     known_ids = {i["id"] for i in items} | {e.get("id") for e in entries if e.get("id")}
-    errors = validate_knowledge(entries, known_ids)
+    errors = validate_knowledge(entries, known_ids) + validate_plan(items)
     write_knowledge(entries, adrs)
     write_wiki(entries, adrs)
     print(f"Indexed {len(entries)} knowledge entr{'y' if len(entries) == 1 else 'ies'} "
           f"+ {len(adrs)} ADR(s). Wrote knowledge/INDEX.md, knowledge/wiki/ and .harness/knowledge.json")
     for err in errors:
-        print(f"  knowledge error: {err}", file=sys.stderr)
+        print(f"  validation error: {err}", file=sys.stderr)
     if errors and "--check" in sys.argv:
         sys.exit(1)
 
